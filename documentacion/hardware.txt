@@ -1,0 +1,6 @@
+TESTING 
+	Raspberry Pi 
+
+DEPLOYMENT (Sistema en rack)
+	Similar a la configuración de un Switch
+	https://www.tonitrus.com/es/servidor/accessories/others/10136080-014-hpe-504635-421-proliant-dl360-g6-2.4ghz-e5530-460w-rack-1u-server/?number=10136080-014&gclid=EAIaIQobChMIl5fkzoeX9gIVTbTVCh3eBgBdEAQYASABEgLC4vD_BwE
