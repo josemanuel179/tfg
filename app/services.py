@@ -70,4 +70,4 @@ def get_data():
 def update_data():
     pass
 
-print(get_data)
+print(get_data())
