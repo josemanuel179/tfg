@@ -67,7 +67,7 @@ def get_data():
     return result
 
 
-def update_data()
+def update_data():
     pass
 
 print(get_data)
