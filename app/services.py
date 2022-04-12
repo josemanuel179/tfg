@@ -24,7 +24,7 @@ def get_services():
 
 def update_services():
     with open("servicesData.json", "r") as jsonFile:
-    data = json.load(jsonFile)
+        data = json.load(jsonFile)
 
     update = dict()
     services = nmap.nmap_version_detection(ip)[ip]["ports"]
