@@ -6,14 +6,14 @@ nmap = nmap3.Nmap()
 ip = "127.0.0.1"
 
 package_manager = {
-    "REHL": ,
-    "Unbuntu": ,
-    "Debian": ,
-    "Arch": ,
-    "Open Suse": ,
-    "Suse": ,
-    "Oracle": ,
-    "Fedora": ,
+    "REHL": "apt",
+    "Unbuntu": "apt",
+    "Debian": "apt",
+    "Arch": "apt",
+    "Open Suse": "apt",
+    "Suse": "apt",
+    "Oracle": "apt",
+    "Fedora": "apt",
 }
 
 def get_services():
