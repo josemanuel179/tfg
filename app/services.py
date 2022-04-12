@@ -60,11 +60,11 @@ def get_package_manager(os, os_like):
 
 
 def get_data():
-    os = get_os()
-    package_manager = get_package_manager()
     services = get_services()
-    result = {**os, **package_manager, **services}
-    return result
+    print(services)
+
+    #result = {**os, **package_manager, **services}
+    #return result
 
 
 def update_data():
