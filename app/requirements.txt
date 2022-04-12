@@ -1,1 +1,1 @@
-psutil
+python3-nmap
