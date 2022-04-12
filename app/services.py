@@ -42,8 +42,8 @@ def get_os():
 
     return {
         "os": {
-            "name": os["ID"]
-            "version": int(os["VERSION"])
+            "name": os["ID"],
+            "version": int(os["VERSION"]),
             "like": os["ID_LIKE"]
         }
     }
