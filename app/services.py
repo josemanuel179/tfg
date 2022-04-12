@@ -1,73 +1,42 @@
 #!/usr/bin/env python
 import os
 import nmap3
-nmap = nmap3.Nmap()
+import json
 
+nmap = nmap3.Nmap()
 ip = "127.0.0.1"
 
-package_manager = {
-    "REHL": "apt",
-    "Unbuntu": "apt",
-    "Debian": "apt",
-    "Arch": "apt",
-    "Open Suse": "apt",
-    "Suse": "apt",
-    "Oracle": "apt",
-    "Fedora": "apt",
-}
-
 def get_services():
-    result = list()
+    data = dict()
     services = nmap.nmap_version_detection(ip)[ip]["ports"]
 
     for service in services:
-        result.append({
+        data.append({
             "servicio": service["service"]["name"],
             "producto": service["service"]["product"],
             "version": service["service"]["version"]
         })
+
+    result = {"servicios" : data}
     
-    return result
+    with open("servicesData.json", "w") as jsonFile:
+        json.dump(result, jsonFile)
 
-def get_os():
-    os_data = os.popen('cat /etc/os-release').read().strip()
-    clean_os_data = os_data.split("\n")
+def update_services():
+    with open("servicesData.json", "r") as jsonFile:
+    data = json.load(jsonFile)
 
-    for element in clean_os_data:
-        i = element.index("=")
-        keys.append(element[0:i])
-        values.append(element[i+2:-1])
+    update = dict()
+    services = nmap.nmap_version_detection(ip)[ip]["ports"]
 
-    os = dict(zip(keys, values))
+    for service in services:
+        update.append({
+            "servicio": service["service"]["name"],
+            "producto": service["service"]["product"],
+            "version": service["service"]["version"]
+        })
 
-    return {
-        "os": {
-            "name": os["ID"],
-            "version": int(os["VERSION"]),
-            "like": os["ID_LIKE"]
-        }
-    }
+    data["services"] = update
 
-def get_package_manager(os, os_like):
-    result = str()
-
-    if os in package_manager.keys():
-        result = package_manager[os]
-    elif os_like in package_manager.keys():
-        result = package_manager[os]
-    
-    return result
-
-
-def get_data():
-    services = get_services()
-    print(services)
-
-    #result = {**os, **package_manager, **services}
-    #return result
-
-
-def update_data():
-    pass
-
-print(get_data())
+    with open("servicesData.json", "w") as jsonFile:
+        json.dump(data, jsonFile)
