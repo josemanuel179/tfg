@@ -19,7 +19,7 @@ def get_services():
 
     result = {"servicios" : data}
     
-    with open("servicesData.json", "w") as jsonFile:
+    with open("servicesData.json", "w+") as jsonFile:
         json.dump(result, jsonFile)
 
 def update_services():
