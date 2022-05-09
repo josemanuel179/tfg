@@ -1,1 +1,1 @@
-python3-nmap
+paramiko==2.10.4
