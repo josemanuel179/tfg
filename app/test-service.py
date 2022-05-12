@@ -66,3 +66,7 @@ class TestService(unittest.TestCase):
     def test_analize_services_XV(self):
         result = service.analize_services('2.4-4.el8','3.1-1.el8')
         self.assertEqual(result, 'OK')
+
+    def test_analize_services_XVI(self):
+        result = service.analize_services('2022a-1.el8', '2022a-2.el8')
+        self.assertEqual(result, 'OK')
