@@ -254,8 +254,11 @@ def execute_analisys(ip, user, password, **key):
     try:
         distro = get_distro(client)
         commands = get_commands_distro(distro)
+        print(commands)
         actual_services = get_installed_services(client, commands)
+        print(actual_services)
         last_versions = get_last_versions(client, commands, actual_services)
+        print(last_versions)
         update_services(client, commands, last_versions)
     
     # En el caso de que la ejecucuión de algun método falle, se continua con la ejecución del servicio

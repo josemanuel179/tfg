@@ -4,8 +4,8 @@ After = multi-user.target
 
 [Service]
 Type = simple
-Restart = always
-ExecStart = /usr/bin/python3 /hermesd/service.py
+Restart = on-failure
+ExecStart = /usr/bin/python3 /hermesd/hermes.py
 
 [Install]
 WantedBy=multi-user.target
