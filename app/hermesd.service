@@ -1,0 +1,11 @@
+[Unit]
+Description = My test service
+After = multi-user.target
+
+[Service]
+Type = simple
+Restart = always
+ExecStart = /bin/sh -c '/usr/bin/python3 /hermesd/service.py'
+
+[Install]
+WantedBy=multi-user.target

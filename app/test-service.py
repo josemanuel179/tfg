@@ -70,3 +70,29 @@ class TestService(unittest.TestCase):
     def test_analize_services_XVI(self):
         result = service.analize_services('2022a-1.el8', '2022a-2.el8')
         self.assertEqual(result, 'OK')
+    
+  # -------- zypper --------  
+
+    def test_analize_services_XVII(self):
+        result = service.analize_services('4.3.91-3.28.1', '4.3.100-150300.3.42.1')
+        self.assertEqual(result, 'UPDATE')
+    
+    def test_analize_services_XVIII(self):
+        result = service.analize_services('3.2-9.24.2', '4.1-150300.16.9.1')
+        self.assertEqual(result, 'OK')
+    
+    def test_analize_services_XX(self):
+        result = service.analize_services('20.10.9_ce-156.1','20.10.12_ce-159.1')
+        self.assertEqual(result, 'OK')
+
+    def test_analize_services_XXI(self):
+        result = service.analize_services('2.20-2.1','2.26-150300.4.3.1')
+        self.assertEqual(result, 'UPDATE')
+    
+    def test_analize_services_XXII(self):
+        result = service.analize_services('0.6.65-2.1','0.6.68-150300.4.5.1')
+        self.assertEqual(result, 'UPDATE')
+    
+    def test_analize_services_XXIII(self):
+        result = service.analize_services('1.2-1.30','1.2-3.3.1')
+        self.assertEqual(result, 'UPDATE')

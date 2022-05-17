@@ -15,11 +15,7 @@ def get_commands_distro(distro):
     
     # Si el S.O. de la maquina basadas en OpenSuse
     elif 'opensuse' in distro:
-        commands = ['opensuse', 'zypper se -s --installed-only', 'zypper list-updates', 'zypper up']
-
-    # Si el S.O. de la maquina es Arch
-    elif distro == 'centos':
-        commands = []
+        commands = ['opensuse', 'zypper list-updates', 'zypper list-updates', 'zypper up -y']
     
     return commands
 
@@ -55,29 +51,29 @@ def get_installed_services(client, commands):
     services_list_clean = [" ".join(element.split()) for element in services_list]
     services_split = [element.split(' ') for element in services_list_clean][:-1]
     
-    # 
+    # Si el S.O. de la máquina es una variante de Fedora
     if commands[0] == 'fedora':
         
-        #
+        # Almacenamiento de los datos
         for service in services_split:
             services.append([service[0], service[1]])
     
-    #
+    # Si el S.O. de la máquina es una variante de Debian
     elif commands[0] == 'debian':
         
-        # 
+        # Almacenamiento de los datos
         for service in services_split[1:]:
             if '/' in service:
                 services.append([service[0].split('/')[0], service[1]])
             else:
                 services.append([service[0], service[1]])
 
-    #
+    # Si el S.O. de la máquina es una variante de OpenSUSE
     elif commands[0] == 'opensuse':
         
-        #
+        # Almacenamiento de los datos
         for service in services_split[5:]:
-            services.append([service[2], service[6]])
+            services.append([service[4], service[6]])
 
     return services
  
@@ -132,6 +128,7 @@ def analize_services(actual, new):
             # En caso contrario
             else:
                 result = 'OK'
+
         except:
             result = 'OK'
 
@@ -157,24 +154,46 @@ def get_last_versions(client, commands, installed_services):
     services_list_clean = [" ".join(element.split()) for element in services_list]
     services_split = [element.split(' ') for element in services_list_clean][:-1]
      
-    # 
+    # Si el S.O. de la máquina es una variante de Fedora
     if commands[0] == 'fedora':
         
-        # Almacenamiento de los datos analizados para su posterior analisis
+        # Bucle por los datos obtenidos
         for service in services_split:
+
+            # Almacenamiento de los datos en dos listas
             services.append([service[0], service[1]])
             services_names.append(service[0])
     
+    # Si el S.O. de la máquina es una variante de Debian
     elif commands[0] == 'debian':
 
-        # Almacenamiento de los datos analizados para su posterior analisis
+        # Bucle por los datos obtenidos
         for service in services_split:
+            
+            # Si hay un '/' dentro de los datos analizados
             if '/' in service:
+                
+                # Almacenamiento de los datos en dos listas 
                 services.append([service[0].split('/')[0], service[1]])
                 services_names.append(service[0].split('/')[0])
+            
+            # En caso contrario
             else:
+
+                # Almacenamiento de los datos en dos listas 
                 services.append([service[0], service[1]])
                 services_names.append(service[0])
+    
+    # Si el S.O. de la máquina es una variante de OpenSUSE
+    elif commands[0] == 'opensuse':
+        
+        # Bucle por los datos obtenidos
+        for service in services_split[5:]:
+            
+            # Almacenamiento de los datos en dos listas 
+            services.append([service[4], service[8]])
+            services_names.append(service[4])
+
 
     # Almacenamiento de los resultados  
     for element in installed_services:
@@ -196,8 +215,11 @@ def get_last_versions(client, commands, installed_services):
 
 # Método principal destinado a la actualización de servicios con versiones nuevas
 def update_services(client, commands, updates):   
-    # 
+    
+    # Si la lista de 'updates' no esta vacía
     if updates:
+
+        # Ejecutamos la actualización de todos los servicios
         command = commands[3] + " ".join(updates)
         execute_command(client, command)
 
@@ -211,9 +233,17 @@ def execute_analisys(ip, user, password, **key):
     
     # Establecimiento conexión a la máquina a analizar 
     try:
+
+        # Si existe una llave en el fichero de configuración
         if key:
+
+            # Conexión SSH a la máquina a analizar
             client.connect(hostname=ip, username=user, password=password, key_filename=key)
+       
+        # En caso contrario       
         else:
+
+            # Conexión SSH a la máquina a analizar
             client.connect(hostname=ip, username=user, password=password)
     
     # En el caso de que la conexión falle, se continua con la ejecución del servicio
@@ -223,15 +253,10 @@ def execute_analisys(ip, user, password, **key):
     # Ejecución de los métodos isntanciados previamente
     try:
         distro = get_distro(client)
-        print(distro)
         commands = get_commands_distro(distro)
-        print(commands)
         actual_services = get_installed_services(client, commands)
-        print(actual_services)
         last_versions = get_last_versions(client, commands, actual_services)
-        print(last_versions)       
         update_services(client, commands, last_versions)
-        print('fin')
     
     # En el caso de que la ejecucuión de algun método falle, se continua con la ejecución del servicio
     except:

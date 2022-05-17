@@ -1,0 +1,11 @@
+Instalador
+  1. Instalar todas las dependencias / módulos necesarios para poder ejecutar el servicio
+  2. Crear los directorios necesarios para guardar los ficheros
+    1. mkdir /etc/hermesd/ --> conf
+    2. mkdir ... --> para guardar los ficheros py
+    3. ¿?¿? --> .hermesconf
+  3. Copiar los ficheros a las carpetas donde estos correspondan
+  4. Terminar de comentar
+
+Realizar más pruebas unitarias
+Terminar .serivce 
