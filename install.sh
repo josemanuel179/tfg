@@ -24,6 +24,7 @@ echo -ne '>>>>>>>>>>>>>>>>>>>>>>>   [80%]\r'
 cp app/hermesd.service /etc/systemd/system/.
 cp app/service.conf /etc/hermesd/.
 cp app/service.py /hermesd/.
+cp app/main.py /hermesd/.
 sleep 2
 
 echo 'Reinicio systemctl'

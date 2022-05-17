@@ -9,7 +9,7 @@ import service
 
 # 
 config = configparser.ConfigParser()
-
+print('algo')
 # 
 try:
     #
@@ -24,9 +24,7 @@ try:
 
 # 
 except:
-
-    #
-    raise
+    pass
 
 print(str(sys.argv))
 exit()
