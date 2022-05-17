@@ -2,6 +2,7 @@
 
 import re
 import paramiko
+import sys
 
 # Método secundario destinado a la obtención de las instrucciones necesarios para la operación del servicio dependiendo del S.O. de la máquina
 def get_commands_distro(distro):
@@ -255,11 +256,14 @@ def execute_analisys(ip, user, password, **key):
         distro = get_distro(client)
         commands = get_commands_distro(distro)
         print(commands)
+        sys.stdout.flush()
         actual_services = get_installed_services(client, commands)
         print(actual_services)
+        sys.stdout.flush()
         last_versions = get_last_versions(client, commands, actual_services)
         print(last_versions)
         update_services(client, commands, last_versions)
+        sys.stdout.flush()
     
     # En el caso de que la ejecucuión de algun método falle, se continua con la ejecución del servicio
     except:
