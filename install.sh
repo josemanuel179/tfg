@@ -21,7 +21,7 @@ sleep 2
 
 echo 'Copia de los fichero necesarios a los directorios'
 echo -ne '>>>>>>>>>>>>>>>>>>>>>>>   [80%]\r'
-cp app/hermesd.service /etc/systemd/system/.
+cp app/hermesd.service /lib/systemd/system.
 cp app/service.conf /etc/hermesd/.
 cp app/service.py /hermesd/.
 cp app/main.py /hermesd/.

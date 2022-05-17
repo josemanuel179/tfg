@@ -1,15 +1,13 @@
 #!/usr/bin/python3
 
-from ast import arguments
+import service
 import time
-import sys
 import configparser
 import ipaddress
-import service
 
 # 
 config = configparser.ConfigParser()
-print('algo')
+
 # 
 try:
     #
@@ -26,19 +24,14 @@ try:
 except:
     pass
 
-print(str(sys.argv))
-exit()
 
-'''
 # 
 while True:
     
-    # 
+    
     for ip in ips:
-    
-        # 
-        service.execute_analisys(str(ip), user, password)
-    
-    # 
+     
+        service.execute_analisys(str(ip), 'root', 'root')
+        print('fin')
+
     time.sleep(hours * 3600)
-'''
