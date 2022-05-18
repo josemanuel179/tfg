@@ -2,8 +2,9 @@
 
 echo '########## INSTALADOR SERVICIO HERMESD ##########'
 
-pip install --upgrade pip
-pip3 install -r app/requirements.txt
+apt install -y python3-paramiko
+yum install -y python3-paramiko
+zypper install -y python3-paramiko
 
 mkdir -p /etc/hermesd/
 mkdir -p /hermesd/

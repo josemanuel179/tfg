@@ -21,6 +21,11 @@ try:
     # Obtención y análisis datos tiempo del fichero configuración
     hours = int(config['DEFAULT']['time'])
 
+    # Obtención de las credenciales de autentificacion
+    user = config['CREDENTIALS']['user']
+    password = config['CREDENTIALS']['password']
+    key = config['CREDENTIALS']['key']
+
 # En caso contrario
 except:
     pass
@@ -31,7 +36,10 @@ while True:
     for ip in ips:
      
         # Ejecución servicio
-        service.execute_analisys(str(ip), 'root', 'root')
+        if key != 'null':
+            service.execute_analisys(str(ip), user, password, key)
+        else:
+            service.execute_analisys(str(ip), user, password)
 
     # Estado inactivo hasta que el tiempo finalice
     time.sleep(hours * 3600)
