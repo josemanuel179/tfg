@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import sys
 import service
 import time
 import configparser
@@ -28,7 +29,8 @@ try:
 
 # En caso contrario
 except:
-    pass
+    print("Exception. No se ha podido leer el fichero de configuración")
+    sys.stdout.flush()
 
 while True:
     

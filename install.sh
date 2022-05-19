@@ -11,7 +11,9 @@ mkdir -p /hermesd/
 
 cp app/hermesd.service /lib/systemd/system/.
 cp app/service.conf /etc/hermesd/.
-cp app/service.py /hermesd/.
 cp app/hermes.py /hermesd/.
+cp app/service.py /hermesd/.
+cp app/test-service.py /hermesd/.
+cp app/Makefile /hermesd/.
 
 systemctl daemon-reload

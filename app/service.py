@@ -249,7 +249,8 @@ def execute_analisys(ip, user, password, **key):
     
     # En el caso de que la conexión falle, se continua con la ejecución del servicio
     except:
-        pass
+        print("Excpetion. No se ha podido establecer una conexión con la máquina " + str(ip))
+        sys.stdout.flush()
     
     # Ejecución de los métodos isntanciados previamente
     try:
@@ -267,7 +268,8 @@ def execute_analisys(ip, user, password, **key):
     
     # En el caso de que la ejecucuión de algun método falle, se continua con la ejecución del servicio
     except:
-        pass
+        print("Exception. No se ha podidio ejecutar el análisis en la máquina " + str(ip))
+        sys.stdout.flush()
 
     # Cierre de conexión
     client.close()

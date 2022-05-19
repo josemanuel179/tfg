@@ -1,5 +1,5 @@
 [Unit]
-Description = My test service
+Description = Hermes - Servicio destinado a la actualización automática de servicios Linux
 After = multi-user.target
 
 [Service]
