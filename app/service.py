@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
+from operator import ne
 import re
 import paramiko
 import sys
+import ipaddress
 
 # Método secundario destinado a la obtención de las instrucciones necesarios para la operación del servicio dependiendo del S.O. de la máquina
 def get_commands_distro(distro):
@@ -226,7 +228,35 @@ def update_services(client, commands, updates):
 
     return None
 
-# Método principla destinado a la ejecución de los método previos de forma conjunta
+#  Método principal destinado a la obtención de las IPs de las máquinas a analizar
+def get_ip_range(network):
+    
+    # En el caso de que sea un rango
+    if '-' in network:
+        result = []
+
+        # División del rango de una lista
+        ip_range = network.split('-')
+        ip_range2 = [element.strip() for element in ip_range]
+
+        # Almacenamiento del rango en una lista
+        for i in range(int(ip_range2[0][-1]),int(ip_range2[1][-1])+1):
+            result.append(ip_range2[0][:-1]+ str(i))
+    
+    # En el caso de que sea una red
+    elif '/' in network:
+        
+        # Recolección de todas las IPs dentro de la red
+        ips = list(ipaddress.ip_network(network).hosts())
+        result = [str(element) for element in ips]
+    
+    # En el caso de que solo sea una IP
+    else:
+        result = [network]
+
+    return result
+
+# Método principal destinado a la ejecución de los método previos de forma conjunta
 def execute_analisys(ip, user, password, **key):
     # Instanciación del cliente SSH
     client = paramiko.SSHClient()

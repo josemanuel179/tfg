@@ -1,13 +1,40 @@
 #!/usr/bin/python3
 
 import sys
+from urllib import response
 import service
+import dashboard
 import time
 import configparser
-import ipaddress
+import os
+
+# Método secundario para obtener el estado de una máquina
+def get_status_machine(host):
+    
+    # Obtención del estado
+    try:
+        
+        # Ejecución del comando PING
+        response = os.system("ping -c 1 " + host)
+
+        # Si el PING obtiene una respuesta positiva desde la máquina 
+        if response == 0:
+            return 'OK'
+        
+        # En caso contrario
+        else:
+            return 'NOK'
+
+    # En caso contrario
+    except:
+        print("Exception. No se ha realizar ping sobre la maquina" + host)
+        sys.stdout.flush()  
 
 # Configuración parser fichero configuración
 config = configparser.ConfigParser()
+
+# Intaciación del DashBoard
+# dashboard.create_dash()
 
 # Obtención información fichero configuración
 try:
@@ -17,7 +44,7 @@ try:
     
     # Obtención y análisis datos red del fichero configuración
     network = config['DEFAULT']['network']
-    ips = [str(ip) for ip in ipaddress.IPv4Network(network)]
+    ips = service.get_ip_range(network)
     
     # Obtención y análisis datos tiempo del fichero configuración
     hours = int(config['DEFAULT']['time'])

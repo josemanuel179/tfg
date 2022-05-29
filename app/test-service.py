@@ -1,5 +1,6 @@
 import unittest
 import service
+import ipaddress
 
 class TestService(unittest.TestCase):
 	
@@ -71,8 +72,6 @@ class TestService(unittest.TestCase):
         result = service.analize_services('2022a-1.el8', '2022a-2.el8')
         self.assertEqual(result, 'OK')
     
-  # -------- zypper --------  
-
     def test_analize_services_XVII(self):
         result = service.analize_services('4.3.91-3.28.1', '4.3.100-150300.3.42.1')
         self.assertEqual(result, 'UPDATE')
@@ -96,3 +95,31 @@ class TestService(unittest.TestCase):
     def test_analize_services_XXIII(self):
         result = service.analize_services('1.2-1.30','1.2-3.3.1')
         self.assertEqual(result, 'UPDATE')
+    
+    def test_get_ips_I(self):
+        result = service.get_ip_range('')
+        self.assertEqual(result, [''])
+    
+    def test_get_ips_II(self):
+        result = service.get_ip_range('192.168.56.110')
+        self.assertEqual(result, ['192.168.56.110'])
+    
+    def test_get_ips_III(self):
+        result = service.get_ip_range('63.45.12.34')
+        self.assertEqual(result, ['63.45.12.34'])
+    
+    def test_get_ips_IV(self):
+        result = service.get_ip_range('192.168.56.110-192.168.56.114')
+        self.assertEqual(result, ['192.168.56.110','192.168.56.111','192.168.56.112','192.168.56.113','192.168.56.114'])
+    
+    def test_get_ips_V(self):
+        result = service.get_ip_range('63.45.12.30 - 63.45.12.34')
+        self.assertEqual(result, ['63.45.12.30','63.45.12.31','63.45.12.32','63.45.12.33','63.45.12.34'])
+    
+    def test_get_ips_VI(self):
+        result = service.get_ip_range('192.0.2.0/29')
+        self.assertEqual(result, ['192.0.2.1','192.0.2.2','192.0.2.3','192.0.2.4','192.0.2.5','192.0.2.6'])
+    
+    def test_get_ips_VII(self):
+        result = service.get_ip_range('192.168.56.0/30')
+        self.assertEqual(result, ['192.168.56.1','192.168.56.2'])

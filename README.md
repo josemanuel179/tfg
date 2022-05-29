@@ -1,12 +1,9 @@
-# Trabajo Fin de Grado - Servicio Hermes
-
-[![License](https://poser.pugx.org/aimeos/aimeos-typo3/license.svg)](https://packagist.org/packages/aimeos/aimeos-typo3)
-
+# Trabajo Fin de Grado - Servicio Linux - Hermes
 
 ## Introducción
 
-⋅⋅* **Autor**:
-⋅⋅* **Lenguaje de programación**:
+* **Autor**: José Manuel Martínez Sánchez
+* **Lenguaje de programación**: Python 3.8
 
 
 ## Instalación
