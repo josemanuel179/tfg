@@ -305,9 +305,9 @@ def execute_analisys(ip, user, password, **key):
 
     try:
         date = datetime.datetime.now()
-        with open('hermes.csv', 'w') as f:
+        with open('/hermesd/hermes.csv', 'w') as f:
             writer = csv.writer(f)
-            writer.writerow([x.strftime("%x") + ' ' + x.strftime("%X"), ip, actual_services_len, last_versions_len, update_versions_len])
+            writer.writerow([date.strftime("%x") + ' ' + date.strftime("%X"), ip, actual_services_len, last_versions_len, update_versions_len])
 
     except:
         print("Exception. No se ha almacenar los datos en el fichero hermes.csv")
