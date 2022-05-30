@@ -4,7 +4,9 @@
 Servicio diseñado para indentificar, analizar y actulizar, de forma automática, todos los servicios instalados en una máquina Linux. Las máquinas deben estar basadas en las distribuciones Debian, Fedora y OpenSUSE.
 
 **Autor**: José Manuel Martínez Sánchez
+
 **Lenguaje de programación**: Python 3.8
+
 **Herramientas de desarrollo**: VS Code, VIM, VirtualBox, Terminal
 
 ## Instalación
@@ -14,7 +16,7 @@ El proceso de instalación del servicio es muy sencillo, solo se debe ejecutar e
 ./install.sh
 ```
 
-Una vez se haya ejecutado el fichero, se puede comprobar que el servicio se ha instalado correctamente mediante la instrucción
+Una vez se haya ejecutado el fichero, se puede comprobar que el servicio ha sido instalado correctamente mediante la instrucción
 ```
 systemctl status hermesd
 ```
