@@ -307,12 +307,17 @@ def execute_analisys(ip, user, password, **key):
         print("Exception. No se ha podidio ejecutar el análisis en la máquina " + str(ip))
         sys.stdout.flush()
 
+    # Almacenamiento datos estadísticos
     try:
+        # Obtención de la fecha y hora
         date = datetime.datetime.now()
+
+        # Almacenamiento de los datos en un fichero csv
         with open('/hermesd/hermes.csv', 'w') as f:
             writer = csv.writer(f)
-            writer.writerow([date.strftime("%x") + ' ' + date.strftime("%X"), ip, actual_services_len, last_versions_len, update_versions_len])
+            writer.writerow([date.strftime("%x"), ip, actual_services_len, last_versions_len, update_versions_len])
 
+    # En caso contrario
     except:
         print("Exception. No se ha almacenar los datos en el fichero hermes.csv")
         sys.stdout.flush()
