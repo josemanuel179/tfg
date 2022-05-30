@@ -122,3 +122,11 @@ class TestService(unittest.TestCase):
     def test_get_ips_VII(self):
         result = service.get_ip_range('192.168.56.0/30')
         self.assertEqual(result, ['192.168.56.1','192.168.56.2'])
+    
+    def test_get_ips_VIII(self):
+        result = service.get_ip_range('192.168.56.1,192.168.56.2,192.168.56.3')
+        self.assertEqual(result, ['192.168.56.1','192.168.56.2','192.168.56.3'])
+    
+    def test_get_ips_IX(self):
+        result = service.get_ip_range('192.0.2.1, 192.0.2.2, 192.0.2.3')
+        self.assertEqual(result, ['192.0.2.1','192.0.2.2','192.0.2.3'])

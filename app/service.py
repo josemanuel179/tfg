@@ -256,6 +256,13 @@ def get_ip_range(network):
         ips = list(ipaddress.ip_network(network).hosts())
         result = [str(element) for element in ips]
     
+    # En el caso de que sean varias IPs
+    elif ',' in network:
+
+        # División del rango de una lista
+        ip_range = network.split(',')
+        result = [element.strip() for element in ip_range]
+    
     # En el caso de que solo sea una IP
     else:
         result = [network]
