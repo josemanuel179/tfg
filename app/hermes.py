@@ -3,7 +3,6 @@
 import sys
 from urllib import response
 import service
-import dashboard
 import time
 import configparser
 import os
@@ -63,12 +62,22 @@ while True:
     
     # Bucle por todas las IPs
     for ip in ips:
-     
-        # Ejecución servicio
-        if key != 'null':
-            service.execute_analisys(str(ip), user, password, key)
+        
+        # Si se puede alcanzar la máquina  
+        if get_status_machine(ip) == 'OK':
+
+            # Ejecución servicio si hay KEY
+            if key != 'null':
+                service.execute_analisys(str(ip), user, password, key)
+
+            # En caso contrario
+            else:
+                service.execute_analisys(str(ip), user, password)
+        
+        # En caso contario
         else:
-            service.execute_analisys(str(ip), user, password)
+            print("Exception. No se ha podido leer el fichero de configuración")
+            sys.stdout.flush()
 
     # Estado inactivo hasta que el tiempo finalice
     time.sleep(hours * 3600)

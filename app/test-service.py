@@ -1,6 +1,5 @@
 import unittest
 import service
-import ipaddress
 
 class TestService(unittest.TestCase):
 	

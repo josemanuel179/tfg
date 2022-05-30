@@ -1,5 +1,5 @@
 [Unit]
-Description = Hermes - Servicio destinado a la actualización automática de servicios Linux
+Description = Hermes - Linux service designed to automate the management of installed services
 After = multi-user.target
 
 [Service]
