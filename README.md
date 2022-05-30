@@ -29,7 +29,7 @@ Antes de poder ejecutar el, se debera configurar el fichero **/etc/hermesd/servi
 <dl>
   <dt>network</dt>
   <dd>Dirección o direcciones IP de las máquinas a analizar. Este campo permite introducir: </dd>
-  <dd>IP únicas - 192.168.56.1 \nRangos de IPs (192.168.56.110-192.168.56.114)\nRedes completas (192.168.56.0/24) </dd>
+  <dd>IP únicas - 192.168.56.1<br /> Rangos de IPs (192.168.56.110-192.168.56.114)<br />Redes completas (192.168.56.0/24) </dd>
   <dd>Rangos de IPs (192.168.56.110-192.168.56.114)</dd>
   <dd>Redes completas (192.168.56.0/24)</dd>
 
