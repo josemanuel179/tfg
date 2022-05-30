@@ -17,6 +17,6 @@ cp app/test-service.py /hermesd/.
 cp app/Makefile /hermesd/.
 
 rm /hermesd/hermes.csv
-touch /hermesd/hermes.csv
+cp app/hermes.csv /hermesd/.
 
 systemctl daemon-reload
