@@ -18,7 +18,8 @@ Una vez se haya ejecutado el fichero, se puede **comprobar** que el servicio ha 
 ```
 systemctl status hermesd
 ```
-El resultado de este ejecución dese ser
+El resultado de esta ejecución dese ser
+
 ![intalled service](https://github.com/josemanuel179/tfg/blob/main/documentacion/capturas/intalled.png)
 
 
@@ -60,7 +61,8 @@ Una vez ejecutada la instrucción, puede comprobar que el servicio se ha levanta
 ```
 systemctl status hermesd
 ```
-El resultado de este ejecución dese ser
+El resultado de esta ejecución dese ser
+
 ![start service](https://github.com/josemanuel179/tfg/blob/main/documentacion/capturas/start.png)
 
 ## Ejeccución de los test unitarios
