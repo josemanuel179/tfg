@@ -5,6 +5,8 @@ import re
 import paramiko
 import sys
 import ipaddress
+import csv
+import datetime
 
 # Método secundario destinado a la obtención de las instrucciones necesarios para la operación del servicio dependiendo del S.O. de la máquina
 def get_commands_distro(distro):
@@ -58,7 +60,7 @@ def get_installed_services(client, commands):
     if commands[0] == 'fedora':
         
         # Almacenamiento de los datos
-        for service in services_split:
+        for service in services_split[1:]:
             services.append([service[0], service[1]])
     
     # Si el S.O. de la máquina es una variante de Debian
@@ -78,7 +80,7 @@ def get_installed_services(client, commands):
         for service in services_split[5:]:
             services.append([service[4], service[6]])
 
-    return services
+    return services, len(services)
  
 
 # Método secundario destinado al análisis del versiones de un servicio
@@ -214,7 +216,7 @@ def get_last_versions(client, commands, installed_services):
         else:
             pass
 
-    return result
+    return result, len(services_names), len(result)
 
 # Método principal destinado a la actualización de servicios con versiones nuevas
 def update_services(client, commands, updates):   
@@ -288,17 +290,27 @@ def execute_analisys(ip, user, password, **key):
         commands = get_commands_distro(distro)
         print(commands)
         sys.stdout.flush()
-        actual_services = get_installed_services(client, commands)
+        actual_services, actual_services_len = get_installed_services(client, commands)
         print(actual_services)
         sys.stdout.flush()
-        last_versions = get_last_versions(client, commands, actual_services)
+        last_versions, last_versions_len , update_versions_len = get_last_versions(client, commands, actual_services)
         print(last_versions)
         update_services(client, commands, last_versions)
         sys.stdout.flush()
-    
+
     # En el caso de que la ejecucuión de algun método falle, se continua con la ejecución del servicio
     except:
         print("Exception. No se ha podidio ejecutar el análisis en la máquina " + str(ip))
+        sys.stdout.flush()
+
+    try:
+        date = datetime.datetime.now()
+        with open('hermes.csv', 'w') as f:
+            writer = csv.writer(f)
+            writer.writerow([x.strftime("%x") + ' ' + x.strftime("%X"), ip, actual_services_len, last_versions_len, update_versions_len])
+
+    except:
+        print("Exception. No se ha almacenar los datos en el fichero hermes.csv")
         sys.stdout.flush()
 
     # Cierre de conexión

@@ -5,23 +5,28 @@ Servicio diseñado para indentificar, analizar y actulizar, de forma automática
 
 1. **Autor**: José Manuel Martínez Sánchez
 2. **Lenguaje de programación**: Python 3.8
-3. **Herramientas de desarrollo**: VS Code, VIM, VirtualBox, Terminal
+3. **Herramientas de desarrollo**: VS Code, VIM, VirtualBox, GNU Make 3.81
+
+# Modulos necesarios
+Para ejecutar el servicio se requiere del módulo
+```
+paramiko==2.10.4
+```
 
 ## Instalación
-El proceso de instalación del servicio es muy sencillo, solo se debe ejecutar el fichero **install.sh** desde una terminal de la siguiente forma
+El proceso de instalación del servicio es muy sencillo, solo se debe **ejecutar el fichero install.sh** desde una terminal de la siguiente forma
 
 ```
 ./install.sh
 ```
 
-Una vez se haya ejecutado el fichero, se puede **comprobar** que el servicio ha sido instalado correctamente mediante la instrucción
+Una vez se haya ejecutado el fichero, se puede **comprobar** que el servicio ha sido **instalado correctamente** mediante la instrucción
 ```
 systemctl status hermesd
 ```
-El resultado de esta ejecución dese ser
+El resultado de esta ejecución dese de ser
 
 ![intalled service](https://github.com/josemanuel179/tfg/blob/main/documentacion/capturas/intalled.png)
-
 
 ## Configuración del servicio
 Antes de poder ejecutar el, se debera configurar el fichero **/etc/hermesd/service.conf**. En este encontraremos los siguiente campos
