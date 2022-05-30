@@ -1,13 +1,11 @@
 # Trabajo Fin de Grado - Servicio Linux - Hermes
 
 ## Introducción
-Servicio diseñado para indentificar, analizar y actulizar, de forma automática, todos los servicios instalados en una máquina Linux. Las máquinas deben estar basadas en las distribuciones Debian, Fedora y OpenSUSE.
+Servicio diseñado para indentificar, analizar y actulizar, de forma automática, todos los servicios instalados en una máquina Linux a través de SSH. Las máquinas deben estar basadas en las distribuciones Debian, Fedora y OpenSUSE.
 
-**Autor**: José Manuel Martínez Sánchez
-
-**Lenguaje de programación**: Python 3.8
-
-**Herramientas de desarrollo**: VS Code, VIM, VirtualBox, Terminal
+1. **Autor**: José Manuel Martínez Sánchez
+2. **Lenguaje de programación**: Python 3.8
+3. **Herramientas de desarrollo**: VS Code, VIM, VirtualBox, Terminal
 
 ## Instalación
 El proceso de instalación del servicio es muy sencillo, solo se debe ejecutar el fichero **install.sh** desde una terminal de la siguiente forma
@@ -16,26 +14,36 @@ El proceso de instalación del servicio es muy sencillo, solo se debe ejecutar e
 ./install.sh
 ```
 
-Una vez se haya ejecutado el fichero, se puede comprobar que el servicio ha sido instalado correctamente mediante la instrucción
+Una vez se haya ejecutado el fichero, se puede **comprobar** que el servicio ha sido instalado correctamente mediante la instrucción
 ```
 systemctl status hermesd
 ```
 El resultado de este ejecución dese ser
-# Meter foto
+![intalled service](https://github.com/josemanuel1792/tfg/documentacion/capturas/installed.png)
 
 
 ## Configuración del servicio
 Antes de poder ejecutar el, se debera configurar el fichero **/etc/hermesd/service.conf**. En este encontraremos los siguiente campos
-1. **network**
-    Dirección o direcciones IP de las máquinas a analizar. Este campo permite introducir IP únicas (192.168.56.1), rangos de IPs (192.168.56.110-192.168.56.114) o redes completas (192.168.56.0/24)
-2. **time**
-    Tiempo de espera entre cada análisis, en horas
-3. ***user**
-    Nombre de usuario de las maquinas analiazadas
-4. **password**
-    Contrasña para el usuario
-5. **key**
-    LLave 
+
+<dl>
+  <dt>network</dt>
+  <dd>Dirección o direcciones IP de las máquinas a analizar. Este campo permite introducir: </dd>
+  <dd>IP únicas (192.168.56.1)</dd>
+  <dd>Rangos de IPs (192.168.56.110-192.168.56.114)</dd>
+  <dd>Redes completas (192.168.56.0/24)</dd>
+
+  <dt>time</dt>
+  <dd>Tiempo de espera entre cada análisis, en horas.</dd>
+
+  <dt>user</dt>
+  <dd>Nombre de usuario de acceso las maquinas analiazadas.</dd>
+
+  <dt>password</dt>
+  <dd>Contrasña para el usuario.</dd>
+
+  <dt>key</dt>
+  <dd>LLave privada, en caso de que la conexión SSH a la máquina lo requiera.</dd>
+</dl>
 
 
 ## Ejeccución del servicio
@@ -53,6 +61,6 @@ Una vez ejecutada la instrucción, puede comprobar que el servicio se ha levanta
 systemctl status hermesd
 ```
 El resultado de este ejecución dese ser
-
+![start service](https://github.com/josemanuel1792/tfg/documentacion/capturas/start.png)
 
 ## Ejeccución de los test unitarios
