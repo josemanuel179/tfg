@@ -216,6 +216,8 @@ def get_last_versions(client, commands, installed_services):
         else:
             pass
 
+    print(services_names)
+    sys.stdout.flush()
     return result, len(services_names), len(result)
 
 # Método principal destinado a la actualización de servicios con versiones nuevas
