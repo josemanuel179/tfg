@@ -29,9 +29,7 @@ Antes de poder ejecutar el, se debera configurar el fichero **/etc/hermesd/servi
 <dl>
   <dt>network</dt>
   <dd>Dirección o direcciones IP de las máquinas a analizar. Este campo permite introducir: </dd>
-  <dd>IP únicas - 192.168.56.1<br /> Rangos de IPs (192.168.56.110-192.168.56.114)<br />Redes completas (192.168.56.0/24) </dd>
-  <dd>Rangos de IPs (192.168.56.110-192.168.56.114)</dd>
-  <dd>Redes completas (192.168.56.0/24)</dd>
+  <dd>IP únicas - 192.168.56.1<br /> Rangos de IPs - 192.168.56.110-192.168.56.114<br />Redes completas -192.168.56.0/24</dd>
 
   <dt>time</dt>
   <dd>Tiempo de espera entre cada análisis, en horas.</dd>
@@ -48,16 +46,16 @@ Antes de poder ejecutar el, se debera configurar el fichero **/etc/hermesd/servi
 
 
 ## Ejeccución del servicio
-Para ejecutar el servicio unicmanete debe ejecutar la instrucción. 
+Para ejecutar el servicio unicmanete debe **ejecutar la instrucción**. 
 ```
 systemctl start hermesd
 ```
-En el caso de que se quiera ejecutar el servicio en el momento de inicio de la máquina, se deberá usar la siguiente instrucción
+En el caso de que se quiera ejecutar el servicio siempre en el momento de inicio de la máquina, se deberá usar la siguiente instrucción
 ```
 systemctl enable hermesd
 ```
 
-Una vez ejecutada la instrucción, puede comprobar que el servicio se ha levantado correctamente mediante el comando previamente usado
+Una vez ejecutada la instrucción, puede **comprobar** que el servicio se ha **levantado correctamente** mediante el comando previamente usado
 ```
 systemctl status hermesd
 ```
@@ -66,3 +64,7 @@ El resultado de esta ejecución dese ser
 ![start service](https://github.com/josemanuel179/tfg/blob/main/documentacion/capturas/start.png)
 
 ## Ejeccución de los test unitarios
+Para ejecutar los test unitarios en una terminal, desde el directorio **app**, ejecutar la intrucción
+```
+make test
+```
