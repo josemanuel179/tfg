@@ -163,7 +163,7 @@ def get_last_versions(client, commands, installed_services):
     if commands[0] == 'fedora':
         
         # Comprobación lista no vacia
-        if services_split < 3:
+        if len(services_split) < 3:
             
             # Bucle por los datos obtenidos
             for service in services_split[2:]:
@@ -181,7 +181,7 @@ def get_last_versions(client, commands, installed_services):
     elif commands[0] == 'debian':
 
         # Comprobación lista no vacia
-        if services_split < 2:
+        if len(services_split) < 2:
 
             # Bucle por los datos obtenidos
             for service in services_split[1:]:
@@ -209,7 +209,7 @@ def get_last_versions(client, commands, installed_services):
     elif commands[0] == 'opensuse':
         
          # Comprobación lista no vacia
-        if services_split < 6:
+        if len(services_split) < 6:
         
             # Bucle por los datos obtenidos
             for service in services_split[5:]:

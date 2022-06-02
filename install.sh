@@ -12,7 +12,7 @@ apt install -y openssh > /dev/null 2>&1
 yum install -y openssh > /dev/null 2>&1
 zypper install -y openssh > /dev/null 2>&1
 
-systemctl sshd
+systemctl start sshd
 
 echo 'Generando directorios requeridos...'
 
