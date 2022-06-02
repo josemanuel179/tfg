@@ -8,9 +8,9 @@ apt install -y python3-paramiko > /dev/null 2>&1
 yum install -y python3-paramiko > /dev/null 2>&1
 zypper install -y python3-paramiko > /dev/null 2>&1
 
-apt install -y openssh /dev/null 2>&1
-yum install -y openssh /dev/null 2>&1
-zypper install -y openssh /dev/null 2>&1
+apt install -y openssh > /dev/null 2>&1
+yum install -y openssh > /dev/null 2>&1
+zypper install -y openssh > /dev/null 2>&1
 
 systemctl sshd
 
@@ -32,7 +32,7 @@ rm /hermesd/hermes.csv > /dev/null 2>&1
 cp app/hermes.csv /hermesd/.
 
 echo 'Reiniciando systemd...'
-systemctl daemon-reloaid
+systemctl daemon-reload
 
 echo '########## FIN ##########'
-fi
+

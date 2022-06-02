@@ -162,42 +162,66 @@ def get_last_versions(client, commands, installed_services):
     # Si el S.O. de la máquina es una variante de Fedora
     if commands[0] == 'fedora':
         
-        # Bucle por los datos obtenidos
-        for service in services_split[2:]:
+        # Comprobación lista no vacia
+        if services_split < 3:
+            
+            # Bucle por los datos obtenidos
+            for service in services_split[2:]:
 
-            # Almacenamiento de los datos en dos listas
-            services.append([service[0], service[1]])
-            services_names.append(service[0])
+                # Almacenamiento de los datos en dos listas
+                services.append([service[0], service[1]])
+                services_names.append(service[0])
+
+        # En caso contario
+        else:
+            services = []
+            services_names = []
     
     # Si el S.O. de la máquina es una variante de Debian
     elif commands[0] == 'debian':
 
-        # Bucle por los datos obtenidos
-        for service in services_split:
-            
-            # Si hay un '/' dentro de los datos analizados
-            if '/' in service:
-                
-                # Almacenamiento de los datos en dos listas 
-                services.append([service[0].split('/')[0], service[1]])
-                services_names.append(service[0].split('/')[0])
-            
-            # En caso contrario
-            else:
+        # Comprobación lista no vacia
+        if services_split < 2:
 
-                # Almacenamiento de los datos en dos listas 
-                services.append([service[0], service[1]])
-                services_names.append(service[0])
+            # Bucle por los datos obtenidos
+            for service in services_split[1:]:
+                
+                # Si hay un '/' dentro de los datos analizados
+                if '/' in service:
+                    
+                    # Almacenamiento de los datos en dos listas 
+                    services.append([service[0].split('/')[0], service[1]])
+                    services_names.append(service[0].split('/')[0])
+                
+                # En caso contrario
+                else:
+
+                    # Almacenamiento de los datos en dos listas 
+                    services.append([service[0], service[1]])
+                    services_names.append(service[0])
+        
+        # En caso contario
+        else:
+            services = []
+            services_names = []
     
     # Si el S.O. de la máquina es una variante de OpenSUSE
     elif commands[0] == 'opensuse':
         
-        # Bucle por los datos obtenidos
-        for service in services_split[5:]:
-            
-            # Almacenamiento de los datos en dos listas 
-            services.append([service[4], service[8]])
-            services_names.append(service[4])
+         # Comprobación lista no vacia
+        if services_split < 6:
+        
+            # Bucle por los datos obtenidos
+            for service in services_split[5:]:
+                
+                # Almacenamiento de los datos en dos listas 
+                services.append([service[4], service[8]])
+                services_names.append(service[4])
+        
+        # En caso contario
+        else:
+            services = []
+            services_names = []
 
 
     # Almacenamiento de los resultados  
@@ -308,6 +332,12 @@ def execute_analisys(ip, user, password, key='null'):
         print(last_versions)
         update_services(client, commands, last_versions)
         sys.stdout.flush()
+
+
+    # En el caso de que la ejecucuión de algun método falle, se continua con la ejecución del servicio
+    except:
+        print("Exception. No se ha podidio ejecutar el análisis en la máquina " + str(ip))
+        sys.stdout.flush()
     '''
 
     distro = get_distro(client)
@@ -322,11 +352,6 @@ def execute_analisys(ip, user, password, key='null'):
     update_services(client, commands, last_versions)
     sys.stdout.flush()
 
-
-    # En el caso de que la ejecucuión de algun método falle, se continua con la ejecución del servicio
-    except:
-        print("Exception. No se ha podidio ejecutar el análisis en la máquina " + str(ip))
-        sys.stdout.flush()
 
     # Almacenamiento datos estadísticos
     try:
