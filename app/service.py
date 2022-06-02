@@ -270,7 +270,7 @@ def get_ip_range(network):
     return result
 
 # Método principal destinado a la ejecución de los método previos de forma conjunta
-def execute_analisys(ip, user, password, **key):
+def execute_analisys(ip, user, password, key='null'):
     # Instanciación del cliente SSH
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -279,7 +279,7 @@ def execute_analisys(ip, user, password, **key):
     try:
 
         # Si existe una llave en el fichero de configuración
-        if key:
+        if key != 'null':
 
             # Conexión SSH a la máquina a analizar
             client.connect(hostname=ip, username=user, password=password, key_filename=key)
@@ -294,7 +294,7 @@ def execute_analisys(ip, user, password, **key):
     except:
         print("Excpetion. No se ha podido establecer una conexión con la máquina " + str(ip))
         sys.stdout.flush()
-    
+    '''
     # Ejecución de los métodos isntanciados previamente
     try:
         distro = get_distro(client)
@@ -308,6 +308,20 @@ def execute_analisys(ip, user, password, **key):
         print(last_versions)
         update_services(client, commands, last_versions)
         sys.stdout.flush()
+    '''
+
+    distro = get_distro(client)
+    commands = get_commands_distro(distro)
+    print(commands)
+    sys.stdout.flush()
+    actual_services, actual_services_len = get_installed_services(client, commands)
+    print(actual_services)
+    sys.stdout.flush()
+    last_versions, last_versions_len , update_versions_len = get_last_versions(client, commands, actual_services)
+    print(last_versions)
+    update_services(client, commands, last_versions)
+    sys.stdout.flush()
+
 
     # En el caso de que la ejecucuión de algun método falle, se continua con la ejecución del servicio
     except:
