@@ -26,7 +26,7 @@ systemctl status hermesd
 ```
 El resultado de esta ejecución dese de ser
 
-![intalled service](https://github.com/josemanuel179/tfg/blob/main/documentacion/capturas/intalled.png)
+![intalled service](https://github.com/josemanuel179/tfg/blob/main/doc/capturas/intalled.png)
 
 ## Configuración del servicio
 Antes de poder ejecutar el, se debera configurar el fichero **/etc/hermesd/service.conf**. En este encontraremos los siguiente campos
@@ -66,7 +66,7 @@ systemctl status hermesd
 ```
 El resultado de esta ejecución dese ser
 
-![start service](https://github.com/josemanuel179/tfg/blob/main/documentacion/capturas/start.png)
+![start service](https://github.com/josemanuel179/tfg/blob/main/doc/capturas/start.png)
 
 ## Ejeccución de los test unitarios
 Para ejecutar los test unitarios en una terminal, desde el directorio **app**, ejecutar la intrucción
