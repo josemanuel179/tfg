@@ -223,12 +223,6 @@ def get_last_versions(client, commands, installed_services):
             services = []
             services_names = []
 
-    print("servicios ultima version\n")
-    print(services)
-    sys.stdout.flush()
-    print(services_names)
-    sys.stdout.flush()
-
     # Almacenamiento de los resultados  
     for element in installed_services:
         
@@ -245,10 +239,6 @@ def get_last_versions(client, commands, installed_services):
         else:
             pass
 
-    print(services)
-    sys.stdout.flush()
-    print(services_names)
-    sys.stdout.flush()
     return result, len(services_names), len(result)
 
 # Método principal destinado a la actualización de servicios con versiones nuevas
@@ -350,7 +340,7 @@ def execute_analisys(ip, user, password, key='null'):
         date = datetime.datetime.now()
 
         # Almacenamiento de los datos en un fichero csv
-        with open('/hermesd/hermes.csv', 'w') as f:
+        with open('/hermesd/hermes.csv', 'a') as f:
             writer = csv.writer(f)
             writer.writerow([date.strftime("%Y-%m-%d %H:%M:%S"), commands[0].capitalize(), actual_services_len, update_versions_len, actual_services_len-last_versions_len, last_versions_len])
 
