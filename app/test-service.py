@@ -95,6 +95,10 @@ class TestService(unittest.TestCase):
         result = service.analize_services('1.2-1.30','1.2-3.3.1')
         self.assertEqual(result, 'UPDATE')
     
+    def test_analize_services_XXVI(self):
+        result = service.analize_services('2.4.37-40','2.4.37-47')
+        self.assertEqual(result, 'UPDATE')
+    
     def test_get_ips_I(self):
         result = service.get_ip_range('')
         self.assertEqual(result, [''])

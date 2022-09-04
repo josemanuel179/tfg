@@ -4,13 +4,9 @@ echo '########## INSTALADOR SERVICIO HERMESD ##########'
 
 echo 'Descargando paquetes necesarios...'
 
-apt install -y python3-paramiko > /dev/null 2>&1
-yum install -y python3-paramiko > /dev/null 2>&1
-zypper install -y python3-paramiko > /dev/null 2>&1
-
-apt install -y openssh > /dev/null 2>&1
-yum install -y openssh > /dev/null 2>&1
-zypper install -y openssh > /dev/null 2>&1
+pip3 install --upgrade pip
+pip3 install setuptools_rust
+pip3 install paramiko
 
 systemctl start sshd
 
@@ -30,6 +26,8 @@ cp app/Makefile /hermesd/.
 
 rm /hermesd/hermes.csv > /dev/null 2>&1
 cp app/hermes.csv /hermesd/.
+
+chmod 600 app/service.conf
 
 echo 'Reiniciando systemd...'
 systemctl daemon-reload

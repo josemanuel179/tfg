@@ -19,7 +19,7 @@ def get_commands_distro(distro):
         commands = ['debian', 'apt list --installed', 'apt list --upgradable', 'apt install -y ']
     
     # Si el S.O. de la maquina basadas en OpenSuse
-    elif 'opensuse' in distro:
+    elif 'opensuse' in distro or 'suse' in distro:
         commands = ['opensuse', 'zypper list-updates', 'zypper list-updates', 'zypper up -y']
     
     return commands
@@ -158,7 +158,9 @@ def get_last_versions(client, commands, installed_services):
     services_list = output.split('\n')
     services_list_clean = [" ".join(element.split()) for element in services_list]
     services_split = [element.split(' ') for element in services_list_clean][:-1]
-     
+    print(services_split)
+    sys.stdout.flush()
+
     # Si el S.O. de la máquina es una variante de Fedora
     if commands[0] == 'fedora':
         
@@ -318,7 +320,7 @@ def execute_analisys(ip, user, password, key='null'):
     except:
         print("Excpetion. No se ha podido establecer una conexión con la máquina " + str(ip))
         sys.stdout.flush()
-    '''
+    
     # Ejecución de los métodos isntanciados previamente
     try:
         distro = get_distro(client)
@@ -338,19 +340,8 @@ def execute_analisys(ip, user, password, key='null'):
     except:
         print("Exception. No se ha podidio ejecutar el análisis en la máquina " + str(ip))
         sys.stdout.flush()
-    '''
 
-    distro = get_distro(client)
-    commands = get_commands_distro(distro)
-    print(commands)
-    sys.stdout.flush()
-    actual_services, actual_services_len = get_installed_services(client, commands)
-    print(actual_services)
-    sys.stdout.flush()
-    last_versions, last_versions_len , update_versions_len = get_last_versions(client, commands, actual_services)
-    print(last_versions)
-    update_services(client, commands, last_versions)
-    sys.stdout.flush()
+    
 
 
     # Almacenamiento datos estadísticos
@@ -361,7 +352,7 @@ def execute_analisys(ip, user, password, key='null'):
         # Almacenamiento de los datos en un fichero csv
         with open('/hermesd/hermes.csv', 'w') as f:
             writer = csv.writer(f)
-            writer.writerow([date.strftime("%x"), ip, actual_services_len, update_versions_len, actual_services_len-last_versions_len, last_versions_len])
+            writer.writerow([date.strftime("%Y-%m-%d %H:%M:%S"), commands[0].capitalize(), actual_services_len, update_versions_len, actual_services_len-last_versions_len, last_versions_len])
 
     # En caso contrario
     except:
