@@ -342,6 +342,7 @@ def execute_analisys(ip, user, password, key='null'):
         # Almacenamiento de los datos en un fichero csv
         with open('/hermesd/hermes.csv', 'a') as f:
             writer = csv.writer(f)
+            writer.writerow("\n")
             writer.writerow([date.strftime("%Y-%m-%d %H:%M:%S"), commands[0].capitalize(), actual_services_len, update_versions_len, actual_services_len-last_versions_len, last_versions_len])
 
     # En caso contrario
