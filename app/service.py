@@ -158,6 +158,8 @@ def get_last_versions(client, commands, installed_services):
     services_list = output.split('\n')
     services_list_clean = [" ".join(element.split()) for element in services_list]
     services_split = [element.split(' ') for element in services_list_clean][:-1]
+    print(len(services_split))
+    sys.stdout.flush()
 
     # Si el S.O. de la máquina es una variante de Fedora
     if commands[0] == 'fedora':
