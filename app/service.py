@@ -158,8 +158,6 @@ def get_last_versions(client, commands, installed_services):
     services_list = output.split('\n')
     services_list_clean = [" ".join(element.split()) for element in services_list]
     services_split = [element.split(' ') for element in services_list_clean][:-1]
-    print(services_split)
-    sys.stdout.flush()
 
     # Si el S.O. de la máquina es una variante de Fedora
     if commands[0] == 'fedora':
@@ -335,13 +333,10 @@ def execute_analisys(ip, user, password, key='null'):
         update_services(client, commands, last_versions)
         sys.stdout.flush()
 
-
     # En el caso de que la ejecucuión de algun método falle, se continua con la ejecución del servicio
     except:
         print("Exception. No se ha podidio ejecutar el análisis en la máquina " + str(ip))
         sys.stdout.flush()
-
-    
 
 
     # Almacenamiento datos estadísticos

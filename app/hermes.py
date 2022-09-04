@@ -75,7 +75,7 @@ while True:
         
         # En caso contario
         else:
-            print("Exception. No se ha podido leer el fichero de configuración")
+            print("Exception. No se ha podido ejecutar el análisis sobre la máquina")
             sys.stdout.flush()
 
     # Estado inactivo hasta que el tiempo finalice
