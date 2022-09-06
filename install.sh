@@ -24,6 +24,7 @@ cp app/service.conf /etc/hermesd/.
 cp app/hermes.py /hermesd/.
 cp app/service.py /hermesd/.
 cp app/dashboard.py /hermesd/.
+cp app/start.sh /hermesd/.
 
 rm /hermesd/hermes.csv > /dev/null 2>&1
 cp app/hermes.csv /hermesd/.

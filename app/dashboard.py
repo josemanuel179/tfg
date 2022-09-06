@@ -1,6 +1,4 @@
 from dash import Dash, html, dcc, dash_table
-import dash_core_components as dcc
-import dash_html_components as html
 import plotly.express as px
 import pandas as pd
 from dash.dependencies import Input, Output
@@ -141,7 +139,5 @@ def update_figures(selected_year, operative_system):
 
     return install_fig, ok_fig, nok_fig
 
-
-def create_dash():
+if __name__ == "__main__":
     app.run_server(debug=True)
-

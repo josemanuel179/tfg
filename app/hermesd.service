@@ -3,9 +3,12 @@ Description = Hermes - Linux service designed to automate the management of inst
 After = multi-user.target
 
 [Service]
-Type = simple
+Type=forking
 Restart = on-failure
-ExecStart = /usr/bin/python3 /hermesd/hermes.py
+ExecStart= /hermes/start.sh
+TimeoutSec=0
+RemainAfterExit=yes
+GuessMainPID=no
 
 [Install]
 WantedBy=multi-user.target
