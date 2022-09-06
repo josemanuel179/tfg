@@ -4,8 +4,7 @@ After = multi-user.target
 
 [Service]
 Type=forking
-Restart = on-failure
-ExecStart= /hermes/start.sh
+ExecStart= /hermesd/start.sh
 TimeoutSec=0
 RemainAfterExit=yes
 GuessMainPID=no
