@@ -1,3 +1,2 @@
-cd /hermes
-python3 hermes.py &
-python3 dashboard.py
+python3 /hermesd/hermes.py &
+python3 /hermesd/dashboard.py
