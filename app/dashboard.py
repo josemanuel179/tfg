@@ -127,18 +127,6 @@ def update_figures(selected_year, operative_system):
         font_color=colors["text"],
     )
 
-    ok_fig.update_layout(
-        plot_bgcolor=colors["background"],
-        paper_bgcolor=colors["background"],
-        font_color=colors["text"],
-    )
-
-    nok_fig.update_layout(
-        plot_bgcolor=colors["background"],
-        paper_bgcolor=colors["background"],
-        font_color=colors["text"],
-    )
-
     return install_fig, ok_fig, nok_fig
 
 if __name__ == "__main__":
