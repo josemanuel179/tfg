@@ -35,4 +35,3 @@ echo 'Reiniciando systemd...'
 systemctl daemon-reload
 
 echo '########## FIN ##########'
-

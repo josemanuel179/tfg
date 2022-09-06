@@ -140,4 +140,4 @@ def update_figures(selected_year, operative_system):
     return install_fig, ok_fig, nok_fig
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server(debug=True, host='0.0.0.0', port = 8050)
