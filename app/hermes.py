@@ -76,8 +76,5 @@ while True:
             print("Exception. No se ha podido ejecutar el análisis sobre la máquina")
             sys.stdout.flush()
         
-        # Actualización del DashBoard
-        dashboard.create_dash()
-
     # Estado inactivo hasta que el tiempo finalice
     time.sleep(hours * 3600)
