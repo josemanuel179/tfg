@@ -7,6 +7,8 @@ echo 'Descargando paquetes necesarios...'
 pip3 install --upgrade pip
 pip3 install setuptools_rust
 pip3 install paramiko
+pip3 install dash
+pip install pandas
 
 systemctl start sshd
 
@@ -21,8 +23,7 @@ cp app/hermesd.service /lib/systemd/system/.
 cp app/service.conf /etc/hermesd/.
 cp app/hermes.py /hermesd/.
 cp app/service.py /hermesd/.
-cp app/test-service.py /hermesd/.
-cp app/Makefile /hermesd/.
+cp app/dashboard.py /hermesd/.
 
 rm /hermesd/hermes.csv > /dev/null 2>&1
 cp app/hermes.csv /hermesd/.

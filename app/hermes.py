@@ -5,6 +5,7 @@ import service
 import time
 import configparser
 import os
+import dashboard
 
 # Método secundario para obtener el estado de una máquina
 def get_status_machine(host):
@@ -32,7 +33,7 @@ def get_status_machine(host):
 config = configparser.ConfigParser()
 
 # Intaciación del DashBoard
-# dashboard.create_dash()
+dashboard.create_dash()
 
 # Obtención información fichero configuración
 try:
