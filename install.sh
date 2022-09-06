@@ -4,11 +4,11 @@ echo '########## INSTALADOR SERVICIO HERMESD ##########'
 
 echo 'Descargando paquetes necesarios...'
 
-pip3 install --upgrade pip
-pip3 install setuptools_rust
-pip3 install paramiko
-pip3 install dash
-pip install pandas
+pip3 install --upgrade pip > /dev/null 2>&1
+pip3 install setuptools_rust > /dev/null 2>&1
+pip3 install paramiko > /dev/null 2>&1
+pip3 install dash > /dev/null 2>&1
+pip install pandas > /dev/null 2>&1
 
 systemctl start sshd
 
@@ -29,7 +29,8 @@ cp app/start.sh /hermesd/.
 rm /hermesd/hermes.csv > /dev/null 2>&1
 cp app/hermes.csv /hermesd/.
 
-chmod 600 app/service.conf
+chmod 600 /etc/hermesd/service.conf
+chmod +x /hermesd/start.sh
 
 echo 'Reiniciando systemd...'
 systemctl daemon-reload
