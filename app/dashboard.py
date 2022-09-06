@@ -91,14 +91,15 @@ app.layout = html.Div(
     Input("execution-dates", "value"),
 )
 def update_figures(selected_year, operative_system):
+    
     if selected_year:
-        filtered_dataset = df[(df.Fecha == selected_year)]
+        df = df[(df.Fecha == selected_year)]
 
     if operative_system:
-        filtered_dataset = filtered_dataset[filtered_dataset.Maquina <= operative_system]
+        df = df[df.Maquina <= operative_system]
 
     install_fig = px.bar(
-        filtered_dataset, 
+        df, 
         x="Maquina", 
         y="ServiciosInstalados", 
         color="continent", 
@@ -106,7 +107,7 @@ def update_figures(selected_year, operative_system):
     )
 
     ok_fig = px.bar(
-        filtered_dataset, 
+        df, 
         x="Maquina", 
         y="ServiciosInstalados", 
         color="continent", 
@@ -114,7 +115,7 @@ def update_figures(selected_year, operative_system):
     )
 
     nok_fig = px.bar(
-        filtered_dataset, 
+        df, 
         x="Maquina", 
         y="ServiciosInstalados", 
         color="continent", 
