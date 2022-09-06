@@ -4,84 +4,59 @@ from dash import Dash, html, dcc, dash_table
 import plotly.express as px
 import pandas as pd
 from dash.dependencies import Input, Output
+import dash_bootstrap_components as dbc
 
-app = Dash(__name__)
+app = Dash(external_stylesheets=[dbc.themes.LUX])
 
 df = pd.read_csv("/hermesd/hermes.csv")
 
-colors = {"background": "#011833", "text": "#7FDBFF"}
-
-app.layout = html.Div(
+controls = dbc.Card(
     [
-        html.H1(
-            "Hermes - Herramienta de gestión de servicioss Linux",
+        html.Div(
+            [
+                dbc.Label("Sistema Operativo Derivado"),
+                dcc.Dropdown(
+                    id="operative-system",
+                    options=[
+                        {"label": col, "value": col} for col in df.Maquina.unique()
+                    ],
+                    value="sepal length (cm)",
+                ),
+            ]
         ),
         html.Div(
             [
-                html.Div(
-                    [
-                        html.Label("Sistema Operativo"),
-                        dcc.Dropdown(
-                            id="operative-system",
-                            options=[
-                                {"label": s, "value": s} for s in df.Maquina.unique()
-                            ],
-                            className="dropdown",
-                        ),
-                    ]
+                dbc.Label("Fechas Ejecuciones"),
+                dcc.Dropdown(
+                    id="execution-dates",
+                    options=[
+                        {"label": col, "value": col} for col in df.Fecha.unique()
+                    ],
                 ),
-                html.Div(
-                    [
-                        html.Label("Fechas Ejecuciones"),
-                        dcc.Dropdown(
-                            id="execution-dates",
-                            options=[
-                                {"label": s, "value": s} for s in df.Fecha.unique()
-                            ],
-                            className="dropdown",
-                        ),
-                    ]
-                ),
-            ],
-            className="row",
+            ]
         ),
-        html.Div(
-            [
-                html.Div(
-                    [
-                        html.Label("Servicios instalados por Sistema Operativo"),
-                        dcc.Graph(
-                            id='install-graph',
-                        ),
-                    ]
-                ),
-                html.Div(
-                    [
-                        html.Label("Servicios actualizados por Sistema Operativo"),
-                        dcc.Graph(
-                            id='ok-graph',
-                        ),
-                    ]
-                ),
-                html.Div(
-                    [
-                        html.Label("Servicios desactualizados por Sistema Operativo"),
-                        dcc.Graph(
-                            id='nok-graph',
-                        ),
-                    ]
-                ),
-            ],
-        ),
-        html.Div(
-            dash_table.DataTable(
-                df.to_dict('records'),
-                [{"name": i, "id": i} for i in df.columns])
-        ),
-
     ],
-    className="container",
+    body=True,
 )
+
+app.layout = dbc.Container(
+    [
+        html.H1("Hermes - Herramienta de gestión de servicios Linux"),
+        html.Hr(),
+        dbc.Row(
+            [
+                dbc.Col(controls, md=4),
+                dbc.Col(dcc.Graph(id="install-graph"), md=8),
+                dbc.Col(dcc.Graph(id="ok-graph"), md=8),
+                dbc.Col(dcc.Graph(id="nok-graph"), md=8),
+                dbc.Col(dcc.Table(df.to_dict('records'), [{"name": i, "id": i} for i in df.columns])),
+            ],
+            align="center",
+        ),
+    ],
+    fluid=True,
+)
+
 
 @app.callback(
     Output("install-graph", "figure"),
