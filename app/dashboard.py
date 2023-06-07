@@ -21,7 +21,7 @@ df['Fecha'] = pd.to_datetime(df['Fecha'], format='%Y-%m-%d %H:%M:%S')
 servicios_por_so = df.groupby('Maquina').agg({'ServiciosOK': 'sum', 'ServiciosNOK': 'sum'}).reset_index()
 
 # Listado con los tipos de sistema operativo disponibles en los datos
-tipos_os = ['fedora', 'debian', 'opensuse']
+tipos_os = ['Fedora', 'Debian', 'Opensuse']
 
 # Listado con las Fechas únicas, que se encuentran dentro de los datos
 dates = df['Fecha'].dt.date.unique()

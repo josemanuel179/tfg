@@ -5,6 +5,8 @@ import paramiko
 import subprocess
 
 ip = '127.0.0.1'
+user = ''
+passw = ''
 
 class TestService(unittest.TestCase):
     
@@ -30,7 +32,7 @@ class TestService(unittest.TestCase):
     def test_TS09_obtencion_sistema_operativo(self):
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        client.connect(hostname=ip, username='root', password='root')
+        client.connect(hostname=ip, username=user, password=passw)
         
         self.assertIn('fedora', service.get_distro(client))
         client.close()
@@ -56,7 +58,7 @@ class TestService(unittest.TestCase):
         
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        client.connect(hostname=ip, username='root', password='root')
+        client.connect(hostname=ip, username=user, password=passw)
         
         distro = service.get_distro(client)
         commands = service.get_commands_distro(distro)
@@ -71,7 +73,7 @@ class TestService(unittest.TestCase):
         
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        client.connect(hostname=ip, username='root', password='root')
+        client.connect(hostname=ip, username=user, password=passw)
         
         distro = service.get_distro(client)
         commands = service.get_commands_distro(distro)
