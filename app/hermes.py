@@ -1,80 +1,91 @@
 #!/usr/bin/python3
 
 import sys
-import service
 import time
+import signal
+import service
 import configparser
-import os
-import dashboard
+from dashboard import app
 
-# Método secundario para obtener el estado de una máquina
-def get_status_machine(host):
+# Método destinado para la gestion del comando 'systemctl stop'
+def sigterm_handler(signum, frame):
+    service.copia_datos()
+    sys.exit(0)
+
+# Método destinado para la gestion del comando 'systemctl restart'
+def sigusr1_handler(signum, frame):
+    service.copia_datos()
+    main()
+
+# Método principal del sistema
+def main():
+
+    # Gestión del comando 'systemctl stop'
+    signal.signal(signal.SIGTERM, sigterm_handler)
     
-    # Obtención del estado
-    try:
-        
-        # Ejecución del comando PING
-        response = os.system("ping -c 1 " + host)
+    # Gestión del comando 'systemctl restart'
+    signal.signal(signal.SIGUSR1, sigusr1_handler)
 
-        # Si el PING obtiene una respuesta positiva desde la máquina 
-        if response == 0:
-            return 'OK'
-        
-        # En caso contrario
-        else:
-            return 'NOK'
+    os_check, systemctl_check = service.get_machine_specs()
+
+    if service.check_machine_specs(os_check, systemctl_check) == False:
+        print("Exception. La máquina no cuenta con los requisitos para lanzar el servicio")
+        sys.stdout.flush()
+        sys.exit(0)
+
+    # Configuración parser fichero configuración
+    config = configparser.ConfigParser()
+
+    # Obtención información fichero configuración
+    try:
+
+        # Lectura fichero configuración
+        config.read('/etc/hermesd/service.conf')
 
     # En caso contrario
     except:
-        print("Exception. No se ha realizar ping sobre la maquina" + host)
-        sys.stdout.flush()  
+        print("Exception. No se ha podido leer el fichero de configuración")
+        sys.stdout.flush()
 
-# Configuración parser fichero configuración
-config = configparser.ConfigParser()
+    try:
+        # Obtención IPs del fichero configuración
+        network = config['DEFAULT']['network']
 
-# Obtención información fichero configuración
-try:
-
-    # Lectura fichero configuración
-    config.read('/etc/hermesd/service.conf')
+    # En caso contrario
+    except:
+        print("Exception. No se ha podido leer el fichero de configuración")
+        sys.stdout.flush()
+        sys.exit(0)
     
-    # Obtención y análisis datos red del fichero configuración
-    network = config['DEFAULT']['network']
+    # Análisis IPs
     ips = service.get_ip_range(network)
+
+    # Obtención del tiempo entre ejecuciones
+    try:
+        # Obtención y análisis datos tiempo del fichero configuración
+        hours = int(config['DEFAULT']['time'])
     
-    # Obtención y análisis datos tiempo del fichero configuración
-    hours = int(config['DEFAULT']['time'])
+    # En caso de error, se usa el valor por defecto
+    except:
+        hours = 6
 
     # Obtención de las credenciales de autentificacion
     user = config['CREDENTIALS']['user']
     password = config['CREDENTIALS']['password']
-    key = config['CREDENTIALS']['key']
 
-# En caso contrario
-except:
-    print("Exception. No se ha podido leer el fichero de configuración")
-    sys.stdout.flush()
+    # Instanciación del dashboard
+    app.run_server(debug = False, port = 8020)
 
-while True:
-    
-    # Bucle por todas las IPs
-    for ip in ips:
+    while True:
         
-        # Si se puede alcanzar la máquina  
-        if get_status_machine(ip) == 'OK':
-
-            # Ejecución servicio si hay KEY
-            if key != 'null':
-                service.execute_analisys(str(ip), user, password, key)
-
-            # En caso contrario
-            else:
+        # Bucle por todas las IPs
+        for ip in ips:
+            
+            # Se ejecuta el análisis sobre cada máquina
                 service.execute_analisys(str(ip), user, password)
-        
-        # En caso contario
-        else:
-            print("Exception. No se ha podido ejecutar el análisis sobre la máquina")
-            sys.stdout.flush()
-        
-    # Estado inactivo hasta que el tiempo finalice
-    time.sleep(hours * 3600)
+            
+        # Estado inactivo hasta que el tiempo finalice
+        time.sleep(hours * 3600)
+
+if __name__ == "__main__":
+    main()

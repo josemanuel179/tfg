@@ -1,16 +1,20 @@
 # Trabajo Fin de Grado - Servicio Linux - Hermes
 
 ## Introducción
-Servicio diseñado para indentificar, analizar y actulizar, de forma automática, todos los servicios instalados en una máquina Linux a través de SSH. Las máquinas deben estar basadas en las distribuciones Debian, Fedora y OpenSUSE.
+Servicio diseñado para identificar, analizar y actualizar, de forma automática, todos los servicios instalados en una máquina Linux a través de SSH. Las máquinas deben estar basadas en las distribuciones Debian, Fedora y OpenSUSE.
 
 1. **Autor**: José Manuel Martínez Sánchez
 2. **Lenguaje de programación**: Python 3.8
 3. **Herramientas de desarrollo**: VS Code, VIM, VirtualBox, GNU Make 3.81
 
-# Modulos necesarios
-Para ejecutar el servicio se requiere del módulo
+# Módulos necesarios
+Para ejecutar el servicio se requiere de los módulos
 ```
 paramiko==2.10.4
+setuptools_rust==1.5.1
+dash==2.4.1
+plotly==5.8.0
+pandas==1.4.2
 ```
 
 ## Instalación
@@ -29,7 +33,7 @@ El resultado de esta ejecución dese de ser
 ![intalled service](https://github.com/josemanuel179/tfg/blob/main/doc/capturas/intalled.png)
 
 ## Configuración del servicio
-Antes de poder ejecutar el, se debera configurar el fichero **/etc/hermesd/service.conf**. En este encontraremos los siguiente campos
+Antes de poder ejecutar el, se deberá configurar el fichero **/etc/hermesd/service.conf**. En este encontraremos los siguientes campos
 
 <dl>
   <dt>network</dt>
@@ -50,8 +54,8 @@ Antes de poder ejecutar el, se debera configurar el fichero **/etc/hermesd/servi
 </dl>
 
 
-## Ejeccución del servicio
-Para ejecutar el servicio unicmanete debe **ejecutar la instrucción**. 
+## Ejecución del servicio
+Para ejecutar el servicio únicmanete debe **ejecutar la instrucción**. 
 ```
 systemctl start hermesd
 ```
@@ -68,8 +72,8 @@ El resultado de esta ejecución dese ser
 
 ![start service](https://github.com/josemanuel179/tfg/blob/main/doc/capturas/start.png)
 
-## Ejeccución de los test unitarios
-Para ejecutar los test unitarios en una terminal, desde el directorio **app**, ejecutar la intrucción
+## Ejecución de los test unitarios
+Para ejecutar los test unitarios en una terminal, desde el directorio **app**, ejecutar la instrucción
 ```
 make test
 ```

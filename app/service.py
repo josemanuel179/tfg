@@ -1,28 +1,21 @@
 #!/usr/bin/env python3
 
-from operator import ne
 import re
-import paramiko
+import os
 import sys
-import ipaddress
 import csv
+import shutil
+import socket
+import platform
+import paramiko
 import datetime
+import ipaddress
+import subprocess
 
-# Método secundario destinado a la obtención de las instrucciones necesarios para la operación del servicio dependiendo del S.O. de la máquina
-def get_commands_distro(distro):
-    # Si el S.O. de la maquina basadas en Fedora (Fedora, Red Hat, CentOS)
-    if 'fedora' in distro:
-        commands = ['fedora','yum list --installed', 'yum list updates', 'yum update --assumeyes ']
-    
-    # Si el S.O. de la maquina basadas en Debian (Debian, Ubuntu)
-    elif 'debian' in distro:
-        commands = ['debian', 'apt list --installed', 'apt list --upgradable', 'apt install -y ']
-    
-    # Si el S.O. de la maquina basadas en OpenSuse
-    elif 'opensuse' in distro or 'suse' in distro:
-        commands = ['opensuse', 'zypper list-updates', 'zypper list-updates', 'zypper up -y']
-    
-    return commands
+from platform import platform
+from xml.dom.minidom import Element
+
+## MÉTODOS SECUNDARIOS ##
 
 # Método secundario destinado a la ejecución de instrucciones remotas a otras máquinas mediante SSH 
 def execute_command(client, command):
@@ -35,14 +28,172 @@ def execute_command(client, command):
 
     return output
 
-# Método principal destinado a la obtención del S.O. de una máquina
+##### ------------------------------------ ######
+
+# Método destinado a obtener el S.O. de la máquina analizadora y el comando systemctl
+def get_machine_specs():
+    
+    # Se obtiene el S.O. de la máquina
+    os_check = platform.system()
+
+    # Se comprueba si la herramienta systemclt se encuentra en la máquina 
+    systemctl_check = os.system('command -v systemctl >/dev/null 2>&1')
+
+    return os_check, systemctl_check
+
+# -------------------------------------------------
+
+# Método principal destinado a obtener que la máquina analizadora cuenta con un S.O. UNIX y con el comando systemctl
+def check_machine_specs(os_check, systemctl_check):
+
+    # En el caso de que sea una máquina UNIX y cuente con systemctl
+    if os_check in ['Linux', 'Darwin'] and systemctl_check == 0:
+        return True
+    
+    # En caso contrario
+    else:
+        return False
+
+# -------------------------------------------------
+
+#  Método principal destinado a la obtención de las IPs de las máquinas a analizar
+def get_ip_range(network):
+
+    # En el caso de que sea un rango
+    if '-' in network:
+        result = []
+
+        # División del rango de una lista
+        ip_range = network.split('-')
+        ip_range2 = [element.strip() for element in ip_range]
+
+        # Almacenamiento del rango en una lista
+        for i in range(int(ip_range2[0][-1]),int(ip_range2[1][-1])+1):
+            result.append(ip_range2[0][:-1]+ str(i))
+    
+    # En el caso de que sea una red
+    elif '/' in network:
+        
+        # Recolección de todas las IPs dentro de la red
+        ips = list(ipaddress.ip_network(network.strip()).hosts())
+        result = [str(element) for element in ips]
+    
+    # En el caso de que sean varias IPs
+    elif ',' in network:
+
+        # División del rango de una lista
+        ip_range = network.split(',')
+        result = [element.strip() for element in ip_range]
+    
+    # En el caso de que solo sea una IP
+    else:
+        result = [network]
+
+    ip_exp = r'^(\d{1,3}\.){3}\d{1,3}$'
+
+    # Se comprueba que todas las IPs tengan formato correcto
+    for element in result:
+        if not re.match(ip_exp, element):
+            result.remove(element)
+
+    # En el caso de que haya un error
+    if len(result) == 1 and result[0] == '':
+        result = []
+    
+    return result
+
+# -------------------------------------------------
+
+# Método destinado a la comprobación, mediante paquetes ICMP, la conexión ente máquinas
+def get_ping(client_ip):
+    
+    # Comando ping
+    ping_command = comando = ['ping', '-c', '1', client_ip]
+    
+    # Ejecución del comando ping y obtención del código de retorno
+    response = subprocess.run(ping_command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    
+    # Si se alcanza la máquina   
+    if response.returncode == 0:
+        return True
+    
+    # En caso contrario
+    else:
+        return False
+
+# -------------------------------------------------
+
+# Método para comprobar si los puertos requeridos se encuentran abiertos
+def check_port_connections(client_ip, port = 22):
+    
+    # Instanciación de un socket con el que abrir una conexión con el puerto 22 - SSH
+    sockect_connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    try:
+        # Conexión con el host y puerto especificados
+        sockect_connection.connect((client_ip, port))
+
+        # En el caso de que se genere una conexión 
+        return True
+
+    # En caso de que la máquina destino rechaze la conexión
+    except:
+        return False
+    
+    # En cualquier casuística que se de, se cierra el puerto
+    finally:
+        sockect_connection.close()
+
+# -------------------------------------------------
+
+# Método destinado a la obtención del S.O. de una máquina
 def get_distro(client):
+    
     # Ejecución del comando 'cat /etc/os-release' a través del método secundario 'execute_command()'
     result = execute_command(client, 'cat /etc/os-release')
 
     return result
 
-# Método principal destinado a la obtención de los servicios instalados en la máquina analizada
+# -------------------------------------------------
+
+
+# Método destinado a la comprobación del S.O. de una máquina
+def check_distro(distro):
+    
+    # Listado de sistemas operativos
+    applied_distros = ['fedora', 'debian', 'opensuse','suse']
+    
+    # Se comprueba que la distribución sea derivada de Debian, Fedora o OpenSUSE
+    return any(element.lower() in distro for element in applied_distros)
+
+# -------------------------------------------------
+
+# Método destinado a la obtención de las instrucciones necesarios para la operación del servicio dependiendo del S.O. de la máquina
+def get_commands_distro(distro):
+    
+    # Listado con los comandos necesarios
+    commands = []
+    
+    # Si el S.O. de la maquina basadas en Fedora (Fedora, Red Hat, CentOS)
+    if 'fedora' in distro:
+        commands = ['fedora','yum list --installed', 'yum list updates', 'yum update --assumeyes ']
+    
+    # Si el S.O. de la maquina basadas en Debian (Debian, Ubuntu)
+    elif 'debian' in distro:
+        commands = ['debian', 'apt list --installed', 'apt list --upgradable', 'apt install -y ']
+    
+    # Si el S.O. de la maquina basadas en OpenSuse
+    elif 'opensuse' in distro or 'suse' in distro:
+        commands = ['opensuse', 'zypper list-updates', 'zypper list-updates', 'zypper up -y']
+    
+    else:
+        commands = None
+        
+    return commands
+
+# -------------------------------------------------
+
+# Método destinado a la obtención de los servicios instalados en la máquina analizada
 def get_installed_services(client, commands):
     # Instanciación de la variable necesaria para la ejecución del método
     services = []
@@ -82,8 +233,9 @@ def get_installed_services(client, commands):
 
     return services, len(services)
  
+# -------------------------------------------------
 
-# Método secundario destinado al análisis del versiones de un servicio
+# Método destinado al análisis del versiones de un servicio
 def analize_services(actual, new):
     # Instanciación de la variable necesaria para la ejecución del método
     comparison = []
@@ -253,73 +405,108 @@ def update_services(client, commands, updates):
 
     return None
 
-#  Método principal destinado a la obtención de las IPs de las máquinas a analizar
-def get_ip_range(network):
+# Método principal destinado a la copia de los datos tras la suspensión del servicio y borrado del fichero 'hermes.csv'
+def copia_datos():
     
-    # En el caso de que sea un rango
-    if '-' in network:
-        result = []
+    # Se obtiene la fecha y se copian los datos
+    try:
+        datetime.now().strftime("%Y%m%d")
+        shutil.copy('/hermesd/hermes.csv', '/hermesd/' + datetime.now().strftime("%Y%m%d") + '_hermes.csv')
 
-        # División del rango de una lista
-        ip_range = network.split('-')
-        ip_range2 = [element.strip() for element in ip_range]
+    # En caso de error
+    except:
+        print("Exception. No se han podido copiar los datos")
+        sys.stdout.flush()
 
-        # Almacenamiento del rango en una lista
-        for i in range(int(ip_range2[0][-1]),int(ip_range2[1][-1])+1):
-            result.append(ip_range2[0][:-1]+ str(i))
-    
-    # En el caso de que sea una red
-    elif '/' in network:
+    # Se abre el documento 'hermes.csv' y se crea un nuevo fichero temporal
+    with open('/hermesd/hermes.csv', 'r') as input, open('/hermesd/hermes_tmp.csv', 'w', newline='') as output:
         
-        # Recolección de todas las IPs dentro de la red
-        ips = list(ipaddress.ip_network(network).hosts())
-        result = [str(element) for element in ips]
-    
-    # En el caso de que sean varias IPs
-    elif ',' in network:
+        # Se intancia tanto el modulo lector como escritor
+        csv_reader = csv.reader(input)
+        csv_writer = csv.writer(output)
 
-        # División del rango de una lista
-        ip_range = network.split(',')
-        result = [element.strip() for element in ip_range]
-    
-    # En el caso de que solo sea una IP
-    else:
-        result = [network]
+        # Se lee la primera fila del fichero y se copia en el temporal
+        firt_line = next(csv_reader)
+        csv_writer.writerow(firt_line)
 
-    return result
+    # Se copian los datos del fichero temporal a 'hermes.csv'  
+    try:
+
+        # Se renombra el archivo temporal para reemplazar el archivo original
+        shutil.move('/hermesd/hermes_tmp.csv', '/hermesd/hermes.csv')
+    
+    # En caso contrario
+    except:
+        print("Exception. No se han podido copiar los datos")
+        sys.stdout.flush()
+
 
 # Método principal destinado a la ejecución de los método previos de forma conjunta
 def execute_analisys(ip, user, password, key='null'):
+    
+    # Comprobación de que la máquina este levantada
+    try:
+
+        # Se ejecuta un ping sobre la máquina a analizar
+        ping = get_ping(ip)
+
+        # Si se obtiene respuesta
+        if ping == True:
+            pass
+
+        # En caso contrario
+        else:
+            print("Excpetion. La máquina " + str(ip) + " no se encuentra levantada")
+            sys.stdout.flush()
+            return  
+
+    # En caso contrario
+    except:
+        print("Excpetion. No se ha podido llegar a la máquina " + str(ip))
+        sys.stdout.flush()
+        return
+    
+    # Comprobación de que la máquina tenga el puerto 22 activo
+    try:
+        
+        # Se prueba la conxexión por el puerto TCP 22
+        port_connection = check_port_connections(ip)
+
+        # Si se obtiene respuesta
+        if port_connection == True:
+            pass
+
+        # En caso contrario
+        else:
+            print("Excpetion. No es posible acceder a la máquina " + str(ip) + " por el puerto TCP 22")
+            sys.stdout.flush()
+            return
+
+    # En caso contrario
+    except:
+        print("Excpetion. No es posible acceder a la máquina " + str(ip) + " por el puerto TCP 22")
+        sys.stdout.flush()
+        return
+    
     # Instanciación del cliente SSH
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     
     # Establecimiento conexión a la máquina a analizar 
     try:
-
-        # Si existe una llave en el fichero de configuración
-        if key != 'null':
-
-            # Conexión SSH a la máquina a analizar
-            client.connect(hostname=ip, username=user, password=password, key_filename=key)
-       
-        # En caso contrario       
-        else:
-
-            # Conexión SSH a la máquina a analizar
-            client.connect(hostname=ip, username=user, password=password)
+        # Conexión SSH a la máquina a analizar
+        client.connect(hostname=ip, username=user, password=password)
     
     # En el caso de que la conexión falle, se continua con la ejecución del servicio
     except:
         print("Excpetion. No se ha podido establecer una conexión con la máquina " + str(ip))
         sys.stdout.flush()
+        return
     
     # Ejecución de los métodos isntanciados previamente
     try:
         distro = get_distro(client)
         commands = get_commands_distro(distro)
-        print(commands)
-        sys.stdout.flush()
         actual_services, actual_services_len = get_installed_services(client, commands)
         print(actual_services)
         sys.stdout.flush()
@@ -332,7 +519,7 @@ def execute_analisys(ip, user, password, key='null'):
     except:
         print("Exception. No se ha podidio ejecutar el análisis en la máquina " + str(ip))
         sys.stdout.flush()
-
+        return
 
     # Almacenamiento datos estadísticos
     try:
@@ -349,6 +536,7 @@ def execute_analisys(ip, user, password, key='null'):
     except:
         print("Exception. No se ha almacenar los datos en el fichero hermes.csv")
         sys.stdout.flush()
+        return
 
     # Cierre de conexión
     client.close()

@@ -1,2 +1,2 @@
 test:
-	python3 -m unittest -v test-service.py
+	python3 -m unittest -v tests/test-service.py
