@@ -12,7 +12,6 @@ import datetime
 import ipaddress
 import subprocess
 
-from platform import platform
 from xml.dom.minidom import Element
 
 ## MÉTODOS SECUNDARIOS ##
@@ -295,6 +294,8 @@ def analize_services(actual, new):
 
     return result
 
+# -------------------------------------------------
+
 # Método principal destinado a la obtención de las últimas versiones de los servicios instalados
 def get_last_versions(client, commands, installed_services):
     # Instanciación de las variables necesarias para la ejecución del método
@@ -393,6 +394,8 @@ def get_last_versions(client, commands, installed_services):
 
     return result, len(services_names), len(result)
 
+# -------------------------------------------------
+
 # Método principal destinado a la actualización de servicios con versiones nuevas
 def update_services(client, commands, updates):   
     
@@ -404,6 +407,8 @@ def update_services(client, commands, updates):
         execute_command(client, command)
 
     return None
+
+# -------------------------------------------------
 
 # Método principal destinado a la copia de los datos tras la suspensión del servicio y borrado del fichero 'hermes.csv'
 def copia_datos():
@@ -440,6 +445,7 @@ def copia_datos():
         print("Exception. No se han podido copiar los datos")
         sys.stdout.flush()
 
+# -------------------------------------------------
 
 # Método principal destinado a la ejecución de los método previos de forma conjunta
 def execute_analisys(ip, user, password, key='null'):

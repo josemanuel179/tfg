@@ -74,7 +74,7 @@ def main():
     password = config['CREDENTIALS']['password']
 
     # Instanciación del dashboard
-    app.run_server(debug = False, port = 8020)
+    app.run_server(host='0.0.0.0', debug = False, port = 8020)
 
     while True:
         

@@ -369,4 +369,4 @@ def actualizar_grafica_por_so(os_seleccionados, start_date, end_date):
 
 # Ejecución la aplicación Dash
 if __name__ == '__main__':
-    app.run_server(debug=False, port=8082)
+    app.run_server(host='0.0.0.0', debug = False, port = 8020)
