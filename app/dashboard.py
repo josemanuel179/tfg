@@ -178,47 +178,54 @@ app.layout = dbc.Container([
 )
 def actualizar_grafica_historico(os_seleccionados, start_date, end_date):
     
-    # Filtrado del dataframe en base a los sistemas operativos seleccionados
-    data = (df[df['Maquina'].isin(os_seleccionados)])
+    # En el caso de que no haya datos
+    if df_filtrado.empty():
+        return html.Div('No hay datos disponibles para generar gráficas.')
 
-    # Filtrado del dataframe en base al rago de fechas seleccionadas
-    df_filtrado = data[(data['Fecha'] >= pd.to_datetime(start_date + ' 00:00:00', format='%Y-%m-%d %H:%M:%S')) & (data['Fecha'] <= pd.to_datetime(end_date + ' 23:59:59', format='%Y-%m-%d %H:%M:%S'))]
+    # En caso contario
+    else:
+    
+        # Filtrado del dataframe en base a los sistemas operativos seleccionados
+        data = (df[df['Maquina'].isin(os_seleccionados)])
 
-    # Longitud de los datos incluidos en el eje de las x
-    numeros_x = list(range(len(df_filtrado['Fecha'])))
+        # Filtrado del dataframe en base al rago de fechas seleccionadas
+        df_filtrado = data[(data['Fecha'] >= pd.to_datetime(start_date + ' 00:00:00', format='%Y-%m-%d %H:%M:%S')) & (data['Fecha'] <= pd.to_datetime(end_date + ' 23:59:59', format='%Y-%m-%d %H:%M:%S'))]
 
-    # Listado de str() con las fechas
-    fechas_str = [element.strftime("%Y-%m-%d %H:%M:%S") for element in list(df_filtrado['Fecha'])]
+        # Longitud de los datos incluidos en el eje de las x
+        numeros_x = list(range(len(df_filtrado['Fecha'])))
 
-    # Creación de la estrucutra de la gráfica de barras
-    figure= go.Figure(
-        data = [
-            
-            # Creación de las barras de la gráfica, cada una especificando su nombre y columna del fichero de datos
-            go.Bar(x = numeros_x, y = df_filtrado['ServiciosInstalados'], name = 'Servicios Instalados', text = 'Servicios Instalados', marker = dict(color = ['green'] * df_filtrado.shape[0])),
-            go.Bar(x = numeros_x, y = df_filtrado['ServiciosActualizados'], name = 'Servicios Actualizados', text = 'Servicios Actualizados', marker = dict(color = ['orange'] * df_filtrado.shape[0])),
-            go.Bar(x = numeros_x, y = df_filtrado['ServiciosOK'], name = 'Servicios OK', text = 'Servicios OK', marker = dict(color = ['blue'] * df_filtrado.shape[0])),
-            go.Bar(x = numeros_x, y = df_filtrado['ServiciosNOK'], name = 'Servicios NOK', text = 'Servicios NOK', marker = dict(color= ['red'] * df_filtrado.shape[0])),
-        ],
+        # Listado de str() con las fechas
+        fechas_str = [element.strftime("%Y-%m-%d %H:%M:%S") for element in list(df_filtrado['Fecha'])]
 
-        layout=go.Layout(
+        # Creación de la estrucutra de la gráfica de barras
+        figure= go.Figure(
+            data = [
+                
+                # Creación de las barras de la gráfica, cada una especificando su nombre y columna del fichero de datos
+                go.Bar(x = numeros_x, y = df_filtrado['ServiciosInstalados'], name = 'Servicios Instalados', text = 'Servicios Instalados', marker = dict(color = ['green'] * df_filtrado.shape[0])),
+                go.Bar(x = numeros_x, y = df_filtrado['ServiciosActualizados'], name = 'Servicios Actualizados', text = 'Servicios Actualizados', marker = dict(color = ['orange'] * df_filtrado.shape[0])),
+                go.Bar(x = numeros_x, y = df_filtrado['ServiciosOK'], name = 'Servicios OK', text = 'Servicios OK', marker = dict(color = ['blue'] * df_filtrado.shape[0])),
+                go.Bar(x = numeros_x, y = df_filtrado['ServiciosNOK'], name = 'Servicios NOK', text = 'Servicios NOK', marker = dict(color= ['red'] * df_filtrado.shape[0])),
+            ],
 
-            # Especificación del tipo de gráfica de barras agrupadas
-            barmode='group',
-            
-            # Especificación de los nombres de los ejes
-            xaxis=dict(title='Fecha', tickvals = numeros_x, ticktext = fechas_str, tickangle = 45),
-            yaxis=dict(title='Número de Servicios'),
+            layout=go.Layout(
 
-            # Especificación de margenes y colores
-            margin=dict(l=40, r=20, t=20, b=20),
-            plot_bgcolor = '#f8f9fa',
-            paper_bgcolor='#f8f9fa'
+                # Especificación del tipo de gráfica de barras agrupadas
+                barmode='group',
+                
+                # Especificación de los nombres de los ejes
+                xaxis=dict(title='Fecha', tickvals = numeros_x, ticktext = fechas_str, tickangle = 45),
+                yaxis=dict(title='Número de Servicios'),
+
+                # Especificación de margenes y colores
+                margin=dict(l=40, r=20, t=20, b=20),
+                plot_bgcolor = '#f8f9fa',
+                paper_bgcolor='#f8f9fa'
+            )
         )
-    )
 
-    # Se devuelve la gráfica de barras
-    return figure
+        # Se devuelve la gráfica de barras
+        return figure
 
 
 # Función de callback para actualizar la gráfica de barras con la comparativa entre 'servicios ok' vs 'servicios nok'
@@ -230,55 +237,62 @@ def actualizar_grafica_historico(os_seleccionados, start_date, end_date):
 )
 def actualizar_grafica_circular(os_seleccionados, start_date, end_date):
     
-    # Filtrado del dataframe en base a los sistemas operativos seleccionados
-    data = (df[df['Maquina'].isin(os_seleccionados)])
+    # En el caso de que no haya datos
+    if df_filtrado.empty():
+        return html.Div('No hay datos disponibles para generar gráficas.')
 
-    # Filtrado del dataframe en base al rago de fechas seleccionadas
-    df_filtrado = data[(data['Fecha'] >= pd.to_datetime(start_date + ' 00:00:00', format='%Y-%m-%d %H:%M:%S')) & (data['Fecha'] <= pd.to_datetime(end_date + ' 23:59:59', format='%Y-%m-%d %H:%M:%S'))]
-    
-    # Agrupación de los datos por sistemas operativos y calculo la suma de 'servicios ok' y 'servicios nok'
-    servicios_por_so = df_filtrado.groupby('Maquina').agg({'ServiciosOK': 'sum', 'ServiciosNOK': 'sum'}).reset_index()
+    # En caso contario
+    else:
 
-    # Creación de la estrucutra de la gráfica circular
-    figure=go.Figure(
-        data=[
+        # Filtrado del dataframe en base a los sistemas operativos seleccionados
+        data = (df[df['Maquina'].isin(os_seleccionados)])
 
-            # Creación de la gráfica circular
-            go.Pie(
+        # Filtrado del dataframe en base al rago de fechas seleccionadas
+        df_filtrado = data[(data['Fecha'] >= pd.to_datetime(start_date + ' 00:00:00', format='%Y-%m-%d %H:%M:%S')) & (data['Fecha'] <= pd.to_datetime(end_date + ' 23:59:59', format='%Y-%m-%d %H:%M:%S'))]
+        
+        # Agrupación de los datos por sistemas operativos y calculo la suma de 'servicios ok' y 'servicios nok'
+        servicios_por_so = df_filtrado.groupby('Maquina').agg({'ServiciosOK': 'sum', 'ServiciosNOK': 'sum'}).reset_index()
 
-                # Etiquetas de la gráfica
-                labels=['Servicios OK', 'Servicios NOK'],
+        # Creación de la estrucutra de la gráfica circular
+        figure=go.Figure(
+            data=[
 
-                # Valores para la gáfica
-                values=[df_filtrado['ServiciosOK'].sum(), df_filtrado['ServiciosNOK'].sum()],
+                # Creación de la gráfica circular
+                go.Pie(
 
-                # Etiquetas para cada valor de la gráfica
-                textinfo='label+percent',
+                    # Etiquetas de la gráfica
+                    labels=['Servicios OK', 'Servicios NOK'],
 
-                # Orientación de las etiquetas
-                insidetextorientation='radial',
+                    # Valores para la gáfica
+                    values=[df_filtrado['ServiciosOK'].sum(), df_filtrado['ServiciosNOK'].sum()],
 
-                # Posición de las etiquetas
-                textposition='outside',
-                
-                # Anchura del circulo central
-                hole=0.4,
+                    # Etiquetas para cada valor de la gráfica
+                    textinfo='label+percent',
 
-                # Colores para cada etiqueta
-                marker=dict(colors=['blue', 'red'])
+                    # Orientación de las etiquetas
+                    insidetextorientation='radial',
+
+                    # Posición de las etiquetas
+                    textposition='outside',
+                    
+                    # Anchura del circulo central
+                    hole=0.4,
+
+                    # Colores para cada etiqueta
+                    marker=dict(colors=['blue', 'red'])
+                )
+            ],
+
+            layout=go.Layout(
+
+                # Especificación de colores
+                plot_bgcolor = '#f8f9fa', 
+                paper_bgcolor='#f8f9fa'
             )
-        ],
-
-        layout=go.Layout(
-
-            # Especificación de colores
-            plot_bgcolor = '#f8f9fa', 
-            paper_bgcolor='#f8f9fa'
         )
-    )
 
-    # Se devuelve la gráfica circular
-    return figure
+        # Se devuelve la gráfica circular
+        return figure
 
 
 # Función de callback para actualizar la gráfica de barras con los servicios por 'sistema operativo'
@@ -290,79 +304,86 @@ def actualizar_grafica_circular(os_seleccionados, start_date, end_date):
 )
 def actualizar_grafica_por_so(os_seleccionados, start_date, end_date):
     
-    # Filtrado del dataframe en base a los sistemas operativos seleccionados
-    data = (df[df['Maquina'].isin(os_seleccionados)])
+    # En el caso de que no haya datos
+    if df.empty():
+        return html.Div('No hay datos disponibles para generar gráficas.')
 
-    # Filtrado del dataframe en base al rago de fechas seleccionadas
-    df_filtrado = data[(data['Fecha'] >= pd.to_datetime(start_date + ' 00:00:00', format='%Y-%m-%d %H:%M:%S')) & (data['Fecha'] <= pd.to_datetime(end_date + ' 23:59:59', format='%Y-%m-%d %H:%M:%S'))]
+    # En caso contario
+    else:
 
-    # Agrupación de los datos por sistemas operativos y calculo la suma de 'servicios ok' y 'servicios nok'
-    servicios_por_so = df_filtrado.groupby('Maquina').agg({'ServiciosActualizados': 'sum', 'ServiciosOK': 'sum', 'ServiciosNOK': 'sum'}).reset_index()
+        # Filtrado del dataframe en base a los sistemas operativos seleccionados
+        data = (df[df['Maquina'].isin(os_seleccionados)])
 
-    # Creación de la estrucutra de la gráfica de barras
-    figure = go.Figure(
-        data=[
+        # Filtrado del dataframe en base al rago de fechas seleccionadas
+        df_filtrado = data[(data['Fecha'] >= pd.to_datetime(start_date + ' 00:00:00', format='%Y-%m-%d %H:%M:%S')) & (data['Fecha'] <= pd.to_datetime(end_date + ' 23:59:59', format='%Y-%m-%d %H:%M:%S'))]
 
-            # Creción barra para los 'servicios ok'
-            go.Bar(
+        # Agrupación de los datos por sistemas operativos y calculo la suma de 'servicios ok' y 'servicios nok'
+        servicios_por_so = df_filtrado.groupby('Maquina').agg({'ServiciosActualizados': 'sum', 'ServiciosOK': 'sum', 'ServiciosNOK': 'sum'}).reset_index()
 
-                # Especificación de los datos por eje
-                x = servicios_por_so['Maquina'],
-                y = servicios_por_so['ServiciosOK'],
+        # Creación de la estrucutra de la gráfica de barras
+        figure = go.Figure(
+            data=[
 
-                # Especificación del nombre
-                text = 'Servicios OK',
-                name = 'Servicios OK',
+                # Creción barra para los 'servicios ok'
+                go.Bar(
 
-                # Especificación del color de la barra
-                marker = dict(color='blue')
-            ),
+                    # Especificación de los datos por eje
+                    x = servicios_por_so['Maquina'],
+                    y = servicios_por_so['ServiciosOK'],
 
-            # Creción barra para los 'servicios ok'
-            go.Bar(
+                    # Especificación del nombre
+                    text = 'Servicios OK',
+                    name = 'Servicios OK',
 
-                # Especificación de los datos por eje
-                x = servicios_por_so['Maquina'],
-                y = servicios_por_so['ServiciosNOK'],
+                    # Especificación del color de la barra
+                    marker = dict(color='blue')
+                ),
 
-                # Especificación del nombre
-                text = 'Servicios NOK',
-                name = 'Servicios NOK',
+                # Creción barra para los 'servicios ok'
+                go.Bar(
 
-                # Especificación del color de la barra
-                marker = dict(color='red')
-            ),
+                    # Especificación de los datos por eje
+                    x = servicios_por_so['Maquina'],
+                    y = servicios_por_so['ServiciosNOK'],
 
-            # Creción barra para los 'servicios actualizados'
-            go.Bar(
+                    # Especificación del nombre
+                    text = 'Servicios NOK',
+                    name = 'Servicios NOK',
 
-                # Especificación de los datos por eje
-                x = servicios_por_so['Maquina'],
-                y = servicios_por_so['ServiciosActualizados'],
+                    # Especificación del color de la barra
+                    marker = dict(color='red')
+                ),
 
-                # Especificación del nombre
-                text = 'Servicios Actualizados',
-                name = 'Servicios Actualizados',
+                # Creción barra para los 'servicios actualizados'
+                go.Bar(
 
-                # Especificación del color de la barra
-                marker = dict(color='orange')
-            )
-        ],
-        
-        layout=go.Layout(
+                    # Especificación de los datos por eje
+                    x = servicios_por_so['Maquina'],
+                    y = servicios_por_so['ServiciosActualizados'],
 
-            # Especificación de los nombres de los ejes
-            xaxis = dict(title='Sistema Operativo'),
-            yaxis = dict(title='Número de Servicios'),
+                    # Especificación del nombre
+                    text = 'Servicios Actualizados',
+                    name = 'Servicios Actualizados',
+
+                    # Especificación del color de la barra
+                    marker = dict(color='orange')
+                )
+            ],
             
-            # Especificación de colores
-            plot_bgcolor = '#f8f9fa', 
-            paper_bgcolor='#f8f9fa'
-        )
-    )
+            layout=go.Layout(
 
-    # Se devuelve la gráfica de barras
-    return figure
+                # Especificación de los nombres de los ejes
+                xaxis = dict(title='Sistema Operativo'),
+                yaxis = dict(title='Número de Servicios'),
+                
+                # Especificación de colores
+                plot_bgcolor = '#f8f9fa', 
+                paper_bgcolor='#f8f9fa'
+            )
+        )
+
+        # Se devuelve la gráfica de barras
+        return figure
 
 # Ejecución la aplicación Dash
 if __name__ == '__main__':

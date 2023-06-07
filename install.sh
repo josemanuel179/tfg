@@ -6,7 +6,8 @@ echo 'Descargando paquetes necesarios...'
 
 pip3 install --upgrade pip > /dev/null 2>&1
 pip3 install paramiko==2.10.4 --ignore-installed > /dev/null 2>&1
-pip3 install dash==2.4.1 --ignore-installed > /dev/null 2>&1
+pip3 install dash --ignore-installed > /dev/null 2>&1
+pip3 install dash_bootstrap_components --ignore-installed > /dev/null 2>&1
 pip3 install plotly==5.8.0 --ignore-installed > /dev/null 2>&1
 pip3 install pandas==1.4.2 --ignore-installed > /dev/null 2>&1
 
