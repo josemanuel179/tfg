@@ -73,9 +73,6 @@ def main():
     user = config['CREDENTIALS']['user']
     password = config['CREDENTIALS']['password']
 
-    # Instanciación del dashboard
-    app.run_server(host='0.0.0.0', debug = False, port = 8020)
-
     while True:
         
         # Bucle por todas las IPs
