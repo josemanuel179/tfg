@@ -12,8 +12,6 @@ import datetime
 import ipaddress
 import subprocess
 
-from xml.dom.minidom import Element
-
 ## MÉTODOS SECUNDARIOS ##
 
 # Método secundario destinado a la ejecución de instrucciones remotas a otras máquinas mediante SSH 
