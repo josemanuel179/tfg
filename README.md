@@ -11,10 +11,12 @@ Servicio diseñado para identificar, analizar y actualizar, de forma automática
 Para ejecutar el servicio se requiere de los módulos
 ```
 paramiko==2.10.4
-setuptools_rust==1.5.1
-dash==2.4.1
-plotly==5.8.0
-pandas==1.4.2
+dash==2.10.2
+dash_bootstrap_components==1.4.1
+dash_core_components==2.0.0
+dash_html_components==2.0.0
+plotly==5.15.0
+pandas==2.0.2
 ```
 
 ## Instalación

@@ -5,9 +5,7 @@ After = multi-user.target
 [Service]
 Type=forking
 ExecStart= /hermesd/start.sh
-TimeoutSec=0
 RemainAfterExit=yes
-GuessMainPID=no
 
 [Install]
 WantedBy=multi-user.target

@@ -9,11 +9,15 @@ from dashboard import app
 
 # Método destinado para la gestion del comando 'systemctl stop'
 def sigterm_handler(signum, frame):
+    print('parando el servicio')
+    sys.stdout.flush()
     service.copia_datos()
     sys.exit(0)
 
 # Método destinado para la gestion del comando 'systemctl restart'
 def sigusr1_handler(signum, frame):
+    print('reinciando servicio')
+    sys.stdout.flush()
     service.copia_datos()
     main()
 

@@ -199,24 +199,33 @@ def get_installed_services(client, commands):
     # El comando usado para esta línea dependerá del S.O de la máquina analizada
     output = execute_command(client, commands[1])
 
-    # Alteración y análsis de los datos obtenidos en la salida
-    services_list = output.split('\n')
-    services_list_clean = [" ".join(element.split()) for element in services_list]
-    services_split = [element.split(' ') for element in services_list_clean][:-1]
+    # Alteración y análsis de los datos obtenidos en la salida si es fedora o debian
+    if commands[0] in ['fedora', 'debian']:
+        services_list = output.split('\n')
+        services_list_clean = [" ".join(element.split()) for element in services_list]
+        services_split = [element.split(' ') for element in services_list_clean][:-1]
     
+    # En el caso de que sea opensuse
+    else:
+        services_list = output.split('\n')
+        services_split = [element.split('|') for element in services_list]
+
     # Si el S.O. de la máquina es una variante de Fedora
     if commands[0] == 'fedora':
         
         # Almacenamiento de los datos
         for service in services_split[1:]:
-            services.append([service[0], service[1]])
+            if '/' in service[0]:
+                services.append([service[0].split('/')[0], service[1]])
+            else:
+                services.append([service[0], service[1]])
     
     # Si el S.O. de la máquina es una variante de Debian
     elif commands[0] == 'debian':
         
         # Almacenamiento de los datos
         for service in services_split[1:]:
-            if '/' in service:
+            if '/' in service[0]:
                 services.append([service[0].split('/')[0], service[1]])
             else:
                 services.append([service[0], service[1]])
@@ -225,8 +234,8 @@ def get_installed_services(client, commands):
     elif commands[0] == 'opensuse':
         
         # Almacenamiento de los datos
-        for service in services_split[5:]:
-            services.append([service[4], service[6]])
+        for service in services_split[4:-1]:
+            services.append([service[2].strip(), service[4].strip()])
 
     return services, len(services)
  
@@ -242,12 +251,12 @@ def analize_services(actual, new):
         
         try:
             # Obtención de las versiones a través de expresiones regulares
-            install_version = re.findall('[\d{1,3}\.]*\d{1,3}-\d{1,3}', actual)[0].split('.')
-            last_version = re.findall('[\d{1,3}\.]*\d{1,3}-\d{1,3}', new)[0].split('.')
+            install_version = re.search(r"\d+(\.\d+){1,2}(-\d+)?", actual).group
+            last_version = re.search(r"\d+(\.\d+){1,2}(-\d+)?", new).group
             
             # Alteración de las versiones para su posterior análisis
-            old = list(map(int, install_version[:-1] + install_version[-1].split('-')))
-            new = list(map(int, last_version[:-1] + last_version[-1].split('-')))
+            old = [int(element) for item in install_version.split('.') for element in item.split('-')]
+            new = [int(element) for item in last_version.split('.') for element in item.split('-')]
             
             # Bucle por ambas lista con las versiones del servicio
             for i in range(0, len(old)):
@@ -305,10 +314,16 @@ def get_last_versions(client, commands, installed_services):
     # El comando usado para esta línea dependerá del S.O de la máquina analizada
     output = execute_command(client, commands[2])
     
-    # Alteración y análsis de los datos obtenidos en la salida
-    services_list = output.split('\n')
-    services_list_clean = [" ".join(element.split()) for element in services_list]
-    services_split = [element.split(' ') for element in services_list_clean][:-1]
+    # Alteración y análsis de los datos obtenidos en la salida si es fedora o debian
+    if commands[0] in ['fedora', 'debian']:
+        services_list = output.split('\n')
+        services_list_clean = [" ".join(element.split()) for element in services_list]
+        services_split = [element.split(' ') for element in services_list_clean][:-1]
+    
+    # En el caso de que sea opensuse
+    else:
+        services_list = output.split('\n')
+        services_split = [element.split('|') for element in services_list]
 
     # Si el S.O. de la máquina es una variante de Fedora
     if commands[0] == 'fedora':
@@ -318,11 +333,21 @@ def get_last_versions(client, commands, installed_services):
             
             # Bucle por los datos obtenidos
             for service in services_split[2:]:
+                
+                # Si hay un '/' dentro de los datos analizados
+                if '/' in service:
+                    
+                    # Almacenamiento de los datos en dos listas 
+                    services.append([service[0].split('/')[0], service[1]])
+                    services_names.append(service[0].split('/')[0])
+                
+                # En caso contrario
+                else:
 
-                # Almacenamiento de los datos en dos listas
-                services.append([service[0], service[1]])
-                services_names.append(service[0])
-
+                    # Almacenamiento de los datos en dos listas 
+                    services.append([service[0], service[1]])
+                    services_names.append(service[0])
+        
         # En caso contario
         else:
             services = []
@@ -360,14 +385,14 @@ def get_last_versions(client, commands, installed_services):
     elif commands[0] == 'opensuse':
         
          # Comprobación lista no vacia
-        if len(services_split) > 6:
+        if len(services_split) > 5:
         
             # Bucle por los datos obtenidos
-            for service in services_split[5:]:
+            for service in services_split[4:-1]:
                 
                 # Almacenamiento de los datos en dos listas 
-                services.append([service[4], service[8]])
-                services_names.append(service[4])
+                services.append([service[2].strip(), service[3].strip()])
+                services_names.append(service[2].strip())
         
         # En caso contario
         else:
@@ -413,8 +438,8 @@ def copia_datos():
     
     # Se obtiene la fecha y se copian los datos
     try:
-        datetime.now().strftime("%Y%m%d")
-        shutil.copy('/hermesd/hermes.csv', '/hermesd/' + datetime.now().strftime("%Y%m%d") + '_hermes.csv')
+        actual_time = datetime.datetime.now()
+        shutil.copy('/hermesd/hermes.csv', '/hermesd/' + actual_time.strftime("%Y%m%d") + '_hermes.csv')
 
     # En caso de error
     except:

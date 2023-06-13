@@ -5,8 +5,8 @@ import paramiko
 import subprocess
 
 ip = '127.0.0.1'
-user = ''
-passw = ''
+user = 'root'
+passw = 'root'
 
 class TestService(unittest.TestCase):
     
@@ -28,13 +28,15 @@ class TestService(unittest.TestCase):
     def test_TS08_comprobacion_ping_ICMP(self):
         self.assertEqual(service.get_ping(ip), True)
     
-    # Revisar
     def test_TS09_obtencion_sistema_operativo(self):
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         client.connect(hostname=ip, username=user, password=passw)
         
-        self.assertIn('fedora', service.get_distro(client))
+        distro_info = service.get_distro(client)
+        so_list =['debian','fedora','opensuse','suse'] 
+        so_check = any(element in distro_info for element in so_list)
+        self.assertTrue(so_check)
         client.close()
     
     def test_TS10_comprobacion_sistema_operativo_maquina_no_dentro_alcance(self):
