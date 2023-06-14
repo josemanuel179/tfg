@@ -46,18 +46,18 @@ Antes de poder ejecutar el, se deberá configurar el fichero **/etc/hermesd/serv
   <dd>Tiempo de espera entre cada análisis, en horas.</dd>
 
   <dt>user</dt>
-  <dd>Nombre de usuario de acceso las maquinas analiazadas.</dd>
+  <dd>Nombre del usuario de acceso las maquinas analizadas.</dd>
 
   <dt>password</dt>
-  <dd>Contrasña para el usuario.</dd>
+  <dd>Contraseña para el usuario.</dd>
 
   <dt>key</dt>
-  <dd>LLave privada, en caso de que la conexión SSH a la máquina lo requiera.</dd>
+  <dd>Llave privada, en caso de que la conexión SSH a la máquina lo requiera.</dd>
 </dl>
 
 
 ## Ejecución del servicio
-Para ejecutar el servicio únicmanete debe **ejecutar la instrucción**. 
+Para ejecutar el servicio únicamente debe **ejecutar la instrucción**. 
 ```
 systemctl start hermesd
 ```
