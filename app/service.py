@@ -20,6 +20,10 @@ def execute_command(client, command):
     # Ejecución del comando y obtención del resultado
     stdin, stdout, stderr = client.exec_command(command)
     
+    # Configuración para que ejecute el función 'exec_command' hasta que termine
+    while not stdout.channel.recv_ready():
+        pass 
+
     # Decodificación del resultado para poder ser almacenada en una variable
     output = stdout.read().decode()
 
@@ -177,7 +181,7 @@ def get_commands_distro(distro):
     
     # Si el S.O. de la maquina basadas en Debian (Debian, Ubuntu)
     elif 'debian' in distro:
-        commands = ['debian', 'apt list --installed', 'apt list --upgradable', 'apt install -y ']
+        commands = ['debian', 'apt list --installed', 'apt list --upgradeable', 'apt install -y ']
     
     # Si el S.O. de la maquina basadas en OpenSuse
     elif 'opensuse' in distro or 'suse' in distro:
@@ -246,18 +250,19 @@ def analize_services(actual, new):
     # Instanciación de la variable necesaria para la ejecución del método
     comparison = []
 
-    # Si ambas entradas no estan vacías
-    if actual != '' and new != '':
-        
-        try:
+    try:
+
+        # Si ambas entradas no estan vacías
+        if actual != '' and new != '':
+            
             # Obtención de las versiones a través de expresiones regulares
             install_version = re.search(r"\d+(\.\d+){1,2}(-\d+)?", actual).group
             last_version = re.search(r"\d+(\.\d+){1,2}(-\d+)?", new).group
-            
+                
             # Alteración de las versiones para su posterior análisis
             old = [int(element) for item in install_version.split('.') for element in item.split('-')]
             new = [int(element) for item in last_version.split('.') for element in item.split('-')]
-            
+                
             # Bucle por ambas lista con las versiones del servicio
             for i in range(0, len(old)):
 
@@ -268,7 +273,7 @@ def analize_services(actual, new):
                 # Si la posición en la versión previa es inferior a la nueva
                 elif old[i] > new[i]:
                     comparison.append('MENOR')
-                
+                    
                 # Si la posición en la versión nueva es inferior a la previa
                 elif old[i] < new[i]:
                     comparison.append('MAYOR')
@@ -292,11 +297,8 @@ def analize_services(actual, new):
             else:
                 result = 'OK'
 
-        except:
-            result = 'OK'
-
     # En caso contrario
-    else:
+    except:
         result = 'OK'
 
     return result
@@ -335,7 +337,7 @@ def get_last_versions(client, commands, installed_services):
             for service in services_split[2:]:
                 
                 # Si hay un '/' dentro de los datos analizados
-                if '/' in service:
+                if '/' in service[0]:
                     
                     # Almacenamiento de los datos en dos listas 
                     services.append([service[0].split('/')[0], service[1]])
@@ -363,7 +365,7 @@ def get_last_versions(client, commands, installed_services):
             for service in services_split[1:]:
                 
                 # Si hay un '/' dentro de los datos analizados
-                if '/' in service:
+                if '/' in service[0]:
                     
                     # Almacenamiento de los datos en dos listas 
                     services.append([service[0].split('/')[0], service[1]])
