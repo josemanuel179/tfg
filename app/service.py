@@ -552,6 +552,9 @@ def execute_analisys(ip, user, password, key='null'):
         update_services(client, commands, last_versions)
         sys.stdout.flush()
 
+        # Actualización de todos los servicios con systemclt
+        execute_command(client, 'systemctl daemon-reload')
+
     # En el caso de que la ejecucuión de algun método falle, se continua con la ejecución del servicio
     except:
         print("Exception. No se ha podidio ejecutar el análisis en la máquina " + str(ip))
