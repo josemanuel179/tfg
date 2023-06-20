@@ -14,6 +14,8 @@ def sigterm_handler(signum, frame):
     service.copia_datos()
     sys.exit(0)
 
+# -------------------------------------------------
+
 # Método destinado para la gestion del comando 'systemctl restart'
 def sigusr1_handler(signum, frame):
     print('reinciando servicio')
@@ -21,7 +23,9 @@ def sigusr1_handler(signum, frame):
     service.copia_datos()
     main()
 
-# Método principal del sistema
+# -------------------------------------------------
+
+# Método principal del servicio
 def main():
 
     # Gestión del comando 'systemctl stop'
@@ -87,6 +91,8 @@ def main():
             
         # Estado inactivo hasta que el tiempo finalice
         time.sleep(hours * 3600)
+
+# -------------------------------------------------
 
 if __name__ == "__main__":
     main()

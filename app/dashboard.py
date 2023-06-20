@@ -29,6 +29,8 @@ dates = df['Fecha'].dt.date.unique()
 # Fecha del día actual
 today = datetime.date.today()
 
+# -------------------------------------------------
+
 # Div con el diseño del panel de configuración
 config_panel = html.Div([
     
@@ -98,6 +100,8 @@ config_panel = html.Div([
     ])
 ])
 
+# -------------------------------------------------
+
 # Div con el diseño del panel de contenidos
 content_panel = html.Div([
 
@@ -154,6 +158,8 @@ content_panel = html.Div([
             'margin-bottom': '8px', 'margin-right': '8px'})        
 ])
 
+# -------------------------------------------------
+
 # Definción del diseño del dashboard
 app.layout = dbc.Container([
 
@@ -171,6 +177,8 @@ app.layout = dbc.Container([
     ],
     fluid=True
 )
+
+# -------------------------------------------------
 
 # Función de callback para actualizar la gráfica de barras con el histórico de los servicios
 @app.callback(
@@ -223,6 +231,7 @@ def actualizar_grafica_historico(os_seleccionados, start_date, end_date):
     # Se devuelve la gráfica de barras
     return figure
 
+# -------------------------------------------------
 
 # Función de callback para actualizar la gráfica de barras con la comparativa entre 'servicios ok' vs 'servicios nok'
 @app.callback(
@@ -283,6 +292,7 @@ def actualizar_grafica_circular(os_seleccionados, start_date, end_date):
     # Se devuelve la gráfica circular
     return figure
 
+# -------------------------------------------------
 
 # Función de callback para actualizar la gráfica de barras con los servicios por 'sistema operativo'
 @app.callback(
@@ -366,6 +376,8 @@ def actualizar_grafica_por_so(os_seleccionados, start_date, end_date):
 
     # Se devuelve la gráfica de barras
     return figure
+
+# -------------------------------------------------
 
 # Ejecución la aplicación Dash
 if __name__ == '__main__':

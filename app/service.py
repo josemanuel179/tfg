@@ -31,6 +31,8 @@ def execute_command(client, command):
 
 ##### ------------------------------------ ######
 
+## MÉTODOS PRINCIPALES ##
+
 # Método destinado a obtener el S.O. de la máquina analizadora y el comando systemctl
 def get_machine_specs():
     
@@ -44,7 +46,7 @@ def get_machine_specs():
 
 # -------------------------------------------------
 
-# Método principal destinado a obtener que la máquina analizadora cuenta con un S.O. UNIX y con el comando systemctl
+# Método destinado a obtener que la máquina analizadora cuenta con un S.O. UNIX y con el comando systemctl
 def check_machine_specs(os_check, systemctl_check):
 
     # En el caso de que sea una máquina UNIX y cuente con systemctl
@@ -57,7 +59,7 @@ def check_machine_specs(os_check, systemctl_check):
 
 # -------------------------------------------------
 
-#  Método principal destinado a la obtención de las IPs de las máquinas a analizar
+#  Método destinado a la obtención de las IPs de las máquinas a analizar
 def get_ip_range(network):
 
     # En el caso de que sea un rango
@@ -105,7 +107,7 @@ def get_ip_range(network):
 
 # -------------------------------------------------
 
-# Método destinado a la comprobación, mediante paquetes ICMP, la conexión ente máquinas
+# Método a la comprobación, mediante paquetes ICMP, la conexión ente máquinas
 def get_ping(client_ip):
     
     # Comando ping
@@ -156,7 +158,6 @@ def get_distro(client):
     return result
 
 # -------------------------------------------------
-
 
 # Método destinado a la comprobación del S.O. de una máquina
 def check_distro(distro):
