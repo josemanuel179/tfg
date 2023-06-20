@@ -186,7 +186,7 @@ def get_commands_distro(distro):
     
     # Si el S.O. de la maquina basadas en OpenSuse
     elif 'opensuse' in distro or 'suse' in distro:
-        commands = ['opensuse', 'zypper list-updates', 'zypper list-updates', 'zypper up -y']
+        commands = ['opensuse', 'zypper pa --installed-only', 'zypper list-updates', 'zypper up -y']
     
     else:
         commands = None
@@ -240,7 +240,8 @@ def get_installed_services(client, commands):
         
         # Almacenamiento de los datos
         for service in services_split[4:-1]:
-            services.append([service[2].strip(), service[4].strip()])
+            if service[0].strip() in ['i','i+']:
+                services.append([service[2].strip(), service[4].strip()])
 
     return services, len(services)
  
@@ -257,8 +258,8 @@ def analize_services(actual, new):
         if actual != '' and new != '':
             
             # Obtención de las versiones a través de expresiones regulares
-            install_version = re.search(r"\d+(\.\d+){1,2}(-\d+)?", actual).group
-            last_version = re.search(r"\d+(\.\d+){1,2}(-\d+)?", new).group
+            install_version = re.search(r"\d+(\.\d+){1,2}(-\d+)?", actual).group()
+            last_version = re.search(r"\d+(\.\d+){1,2}(-\d+)?", new).group()
                 
             # Alteración de las versiones para su posterior análisis
             old = [int(element) for item in install_version.split('.') for element in item.split('-')]
@@ -297,6 +298,10 @@ def analize_services(actual, new):
             # En caso contrario
             else:
                 result = 'OK'
+
+        # En caso contrario
+        else:
+          result = 'OK'  
 
     # En caso contrario
     except:

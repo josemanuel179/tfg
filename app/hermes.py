@@ -5,7 +5,6 @@ import time
 import signal
 import service
 import configparser
-from dashboard import app
 
 # Método destinado para la gestion del comando 'systemctl stop'
 def sigterm_handler(signum, frame):
