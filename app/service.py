@@ -186,7 +186,7 @@ def get_commands_distro(distro):
     
     # Si el S.O. de la maquina basadas en OpenSuse
     elif 'opensuse' in distro or 'suse' in distro:
-        commands = ['opensuse', 'zypper pa --installed-only', 'zypper list-updates', 'zypper up -y']
+        commands = ['opensuse', 'zypper pa --installed-only', 'zypper list-updates', 'zypper up -y ']
     
     else:
         commands = None
