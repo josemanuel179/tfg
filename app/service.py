@@ -542,6 +542,7 @@ def execute_analisys(ip, user, password, key='null'):
     
     # Ejecución de los métodos isntanciados previamente
     try:
+        ('pasa-1')
         distro = get_distro(client)
         commands = get_commands_distro(distro)
         actual_services, actual_services_len = get_installed_services(client, commands)
