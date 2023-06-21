@@ -22,7 +22,7 @@ mkdir -p /hermesd/
 
 echo 'Copian los fichero en los correspondientes directorios...'
 
-cp app/hermesd.service /lib/systemd/system/.
+cp app/hermesd.service /etc/systemd/system/.
 cp app/service.conf /etc/hermesd/.
 cp app/hermes.py /hermesd/.
 cp app/service.py /hermesd/.
