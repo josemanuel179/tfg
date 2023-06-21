@@ -189,6 +189,12 @@ app.layout = dbc.Container([
 )
 def actualizar_grafica_historico(os_seleccionados, start_date, end_date):
     
+    # Cargar de nuevo el archivo CSV
+    df = pd.read_csv('/hermesd/hermes.csv')
+
+    # Actualización de formato de la fecha de los datos para incluir en el dashboard
+    df['Fecha'] = pd.to_datetime(df['Fecha'], format='%Y-%m-%d %H:%M:%S')
+
     # Filtrado del dataframe en base a los sistemas operativos seleccionados
     data = (df[df['Maquina'].isin(os_seleccionados)])
 

@@ -419,7 +419,7 @@ def get_last_versions(client, commands, installed_services):
 
             # Ejecutar el analisis sobre las versiones 
             if status == 'UPDATE':
-                result.append(element[0])
+                result.append(element[0].split('.')[0])
         else:
             pass
 
