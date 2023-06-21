@@ -5,6 +5,7 @@ echo '########## DESINSTALADOR SERVICIO HERMESD ##########'
 echo 'Parando servicios...'
 
 systemctl stop hermesd
+systemctl stop hermesd-dashboard
 
 echo 'Eliminando ficheros...'
 

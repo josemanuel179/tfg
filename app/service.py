@@ -241,7 +241,7 @@ def get_installed_services(client, commands):
         # Almacenamiento de los datos
         for service in services_split[4:-1]:
             if service[0].strip() in ['i','i+']:
-                services.append([service[2].strip(), service[4].strip()])
+                services.append([service[2].strip(), service[3].strip()])
 
     return services, len(services)
  
@@ -399,7 +399,7 @@ def get_last_versions(client, commands, installed_services):
             for service in services_split[4:-1]:
                 
                 # Almacenamiento de los datos en dos listas 
-                services.append([service[2].strip(), service[3].strip()])
+                services.append([service[2].strip(), service[4].strip()])
                 services_names.append(service[2].strip())
         
         # En caso contario
@@ -419,7 +419,7 @@ def get_last_versions(client, commands, installed_services):
 
             # Ejecutar el analisis sobre las versiones 
             if status == 'UPDATE':
-                result.append(element[0].split('.')[0])
+                result.append(element[0])
         else:
             pass
 
@@ -571,6 +571,8 @@ def execute_analisys(ip, user, password, key='null'):
             writer = csv.writer(f)
             fields = [date.strftime("%Y-%m-%d %H:%M:%S"), commands[0].capitalize(), actual_services_len, update_versions_len, actual_services_len-last_versions_len, last_versions_len]
             writer.writerow(fields)
+
+        print('pasa')
 
     # En caso contrario
     except:
