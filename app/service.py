@@ -435,7 +435,7 @@ def update_services(client, commands, updates):
 
         # Ejecutamos la actualización de todos los servicios
         command = commands[3] + " ".join(updates)
-        execute_command(client, command)
+        _ = execute_command(client, command)
 
     return None
 
@@ -542,14 +542,23 @@ def execute_analisys(ip, user, password, key='null'):
     
     # Ejecución de los métodos isntanciados previamente
     try:
+        
+        # Obtención de la distribución
         distro = get_distro(client)
+
+        # Obtención de los comandos
         commands = get_commands_distro(distro)
+
+        # Obtención de los servicios intalados y su cantidad
         actual_services, actual_services_len = get_installed_services(client, commands)
         print(actual_services)
         sys.stdout.flush()
+
+        # Obtención de los servicios a actualizar, la cantidad de servicios disponibles a acutilzar y la cantidad de servicios actualizados
         last_versions, last_versions_len , update_versions_len = get_last_versions(client, commands, actual_services)
         print(last_versions)
-        # update_services(client, commands, last_versions)
+        update_services(client, commands, last_versions)
+        
         # Actualización de systemctl
         _, _, _ = client.exec_command('systemctl daemon-reload', get_pty=True)
         sys.stdout.flush()
@@ -568,7 +577,7 @@ def execute_analisys(ip, user, password, key='null'):
         # Almacenamiento de los datos en un fichero csv
         with open(r'/hermesd/hermes.csv', 'a', newline='') as f:
             writer = csv.writer(f)
-            fields = [date.strftime("%Y-%m-%d %H:%M:%S"), commands[0].capitalize(), actual_services_len, update_versions_len, actual_services_len-last_versions_len, last_versions_len-update_versions_len]
+            fields = [date.strftime("%Y-%m-%d %H:%M:%S"), commands[0].capitalize(), actual_services_len, update_versions_len, actual_services_len-last_versions_len+update_versions_len, last_versions_len-update_versions_len]
             writer.writerow(fields)
 
     # En caso contrario
