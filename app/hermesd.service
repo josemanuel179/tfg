@@ -1,10 +1,11 @@
 [Unit]
 Description = Hermes - Linux service designed to automate the management of installed services
 After = multi-user.target
-Requires = hermesd-dashboard.service
+
 
 [Service]
-ExecStart = python3 /hermesd/hermes.py
+ExecStart = python3 /hermesd/hermes.py &
+ExecStart = python3 /hermesd/hermes.py stop
 
 [Install]
 WantedBy = multi-user.target

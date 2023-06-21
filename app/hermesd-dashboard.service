@@ -1,10 +1,11 @@
 [Unit]
 Description = Hermes Dashboard - Linux service designed to automate the management of installed services
+Requires = hermesd.service
 After = hermesd.service
-Before = hermesd.service
 
 [Service]
 ExecStart = python3 /hermesd/dashboard.py
+ExecStop = /bin/true
 
 [Install]
 WantedBy = multi-user.target
