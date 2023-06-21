@@ -10,7 +10,7 @@ echo 'Eliminando ficheros...'
 
 rm -rf /etc/hermesd/
 rm -rf /hermesd/
-rm /lib/systemd/system/hermesd.service
+rm /etc/systemd/system/hermesd.service
 
 echo 'Reiniciando servicios...'
 
