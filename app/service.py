@@ -550,18 +550,8 @@ def execute_analisys(ip, user, password, key='null'):
         last_versions, last_versions_len , update_versions_len = get_last_versions(client, commands, actual_services)
         print(last_versions)
         # update_services(client, commands, last_versions)
-        
-        # Abrir una sesión de shell interactiva
-        shell = client.invoke_shell()
-        shell.send('sudo systemctl daemon-reload\n')
-        
-        # Esperar a que el comando se complete
-        while not shell.recv_ready():
-            continue
-
-        # Leer la salida del comando
-        _ = shell.recv(4096).decode('utf-8')
-
+        # Actualización de systemctl
+        _, _, _ = client.exec_command('systemctl daemon-reload', get_pty=True)
         sys.stdout.flush()
 
     # En el caso de que la ejecucuión de algun método falle, se continua con la ejecución del servicio
