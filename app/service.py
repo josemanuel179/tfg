@@ -542,7 +542,6 @@ def execute_analisys(ip, user, password, key='null'):
     
     # Ejecución de los métodos isntanciados previamente
     try:
-        ('pasa-1')
         distro = get_distro(client)
         commands = get_commands_distro(distro)
         actual_services, actual_services_len = get_installed_services(client, commands)
@@ -554,7 +553,7 @@ def execute_analisys(ip, user, password, key='null'):
         sys.stdout.flush()
         print('pasa0')
         # Actualización de todos los servicios con systemclt
-        execute_command(client, 'systemctl daemon-reload')
+        _ = execute_command(client, 'systemctl daemon-reload')
         print('pasa1')
     # En el caso de que la ejecucuión de algun método falle, se continua con la ejecución del servicio
     except:
