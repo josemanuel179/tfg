@@ -207,9 +207,9 @@ def actualizar_grafica_historico(os_seleccionados, start_date, end_date):
             
             # Creación de las barras de la gráfica, cada una especificando su nombre y columna del fichero de datos
             go.Bar(x = numeros_x, y = df_filtrado['ServiciosInstalados'], name = 'Servicios Instalados', text = 'Servicios Instalados', marker = dict(color = ['green'] * df_filtrado.shape[0])),
-            go.Bar(x = numeros_x, y = df_filtrado['ServiciosActualizados'], name = 'Servicios Actualizados', text = 'Servicios Actualizados', marker = dict(color = ['orange'] * df_filtrado.shape[0])),
             go.Bar(x = numeros_x, y = df_filtrado['ServiciosOK'], name = 'Servicios OK', text = 'Servicios OK', marker = dict(color = ['blue'] * df_filtrado.shape[0])),
             go.Bar(x = numeros_x, y = df_filtrado['ServiciosNOK'], name = 'Servicios NOK', text = 'Servicios NOK', marker = dict(color= ['red'] * df_filtrado.shape[0])),
+            go.Bar(x = numeros_x, y = df_filtrado['ServiciosActualizados'], name = 'Servicios Actualizados', text = 'Servicios Actualizados', marker = dict(color = ['orange'] * df_filtrado.shape[0])),
         ],
 
         layout=go.Layout(

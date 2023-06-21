@@ -550,11 +550,20 @@ def execute_analisys(ip, user, password, key='null'):
         last_versions, last_versions_len , update_versions_len = get_last_versions(client, commands, actual_services)
         print(last_versions)
         # update_services(client, commands, last_versions)
+        
+        # Abrir una sesión de shell interactiva
+        shell = client.invoke_shell()
+        shell.send('sudo systemctl daemon-reload\n')
+        
+        # Esperar a que el comando se complete
+        while not shell.recv_ready():
+            continue
+
+        # Leer la salida del comando
+        _ = shell.recv(4096).decode('utf-8')
+
         sys.stdout.flush()
-        print('pasa0')
-        # Actualización de todos los servicios con systemclt
-        _ = execute_command(client, 'systemctl daemon-reload')
-        print('pasa1')
+
     # En el caso de que la ejecucuión de algun método falle, se continua con la ejecución del servicio
     except:
         print("Exception. No se ha podidio ejecutar el análisis en la máquina " + str(ip))
@@ -569,10 +578,8 @@ def execute_analisys(ip, user, password, key='null'):
         # Almacenamiento de los datos en un fichero csv
         with open(r'/hermesd/hermes.csv', 'a', newline='') as f:
             writer = csv.writer(f)
-            fields = [date.strftime("%Y-%m-%d %H:%M:%S"), commands[0].capitalize(), actual_services_len, update_versions_len, actual_services_len-last_versions_len, last_versions_len]
+            fields = [date.strftime("%Y-%m-%d %H:%M:%S"), commands[0].capitalize(), actual_services_len, update_versions_len, actual_services_len-last_versions_len, last_versions_len-update_versions_len]
             writer.writerow(fields)
-
-        print('pasa2')
 
     # En caso contrario
     except:
