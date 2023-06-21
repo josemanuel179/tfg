@@ -34,6 +34,7 @@ cp app/hermes.csv /hermesd/.
 
 chmod 600 /etc/hermesd/service.conf
 chmod 400 /hermesd/hermes.csv
+chmod 777 /lib/systemd/system/hermesd.service
 
 chmod 700 /hermesd/hermes.py
 chmod 700 /hermesd/service.py
