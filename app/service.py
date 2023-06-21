@@ -549,7 +549,7 @@ def execute_analisys(ip, user, password, key='null'):
         sys.stdout.flush()
         last_versions, last_versions_len , update_versions_len = get_last_versions(client, commands, actual_services)
         print(last_versions)
-        update_services(client, commands, last_versions)
+        # update_services(client, commands, last_versions)
         sys.stdout.flush()
 
         # Actualización de todos los servicios con systemclt
