@@ -1,7 +1,7 @@
 [Unit]
 Description = Hermes - Linux service designed to automate the management of installed services
-Requires = hermes-dashboard.service
-After = hermes-dashboard.service
+Requires = hermesd-dashboard.service
+After = hermesd-dashboard.service
 
 [Service]
 ExecStart = python3 /hermesd/hermes.py &
