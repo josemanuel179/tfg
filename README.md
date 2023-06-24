@@ -74,7 +74,7 @@ El resultado de esta ejecución dese ser
 ## Ejecución de los test unitarios
 Para ejecutar los test unitarios, primero se deberán configurar las credenciales de acceso **en los ficheros incluidos en el directorio app/test/**. Estas credencias deben de contar con privilegios de superusuario en la máquina en donde se desean ejecutar. 
 
-Una vez configurdo, desde el directorio **app**, se podrán ejecutar los test mediante la instrucción
+Una vez configurado, desde el directorio **app**, se podrán ejecutar los test mediante la instrucción
 ```
 make test
 ```
