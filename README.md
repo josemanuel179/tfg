@@ -23,7 +23,7 @@ pandas==2.0.2
 El proceso de instalación del servicio es muy sencillo, solo se debe **ejecutar el fichero install.sh** desde una terminal de la siguiente forma
 
 ```
-./install.sh
+sh ./install.sh
 ```
 
 Una vez se haya ejecutado el fichero, se puede **comprobar** que el servicio ha sido **instalado correctamente** mediante la instrucción
@@ -34,7 +34,7 @@ El resultado de esta ejecución dese de ser
 
 ![intalled service](https://github.com/josemanuel179/tfg/blob/main/doc/capturas/intalled.png)
 
-## Configuración del servicio
+## Configuración del servicio
 Antes de poder ejecutar el, se deberá configurar el fichero **/etc/hermesd/service.conf**. En este encontraremos los siguientes campos
 
 <dl>
@@ -50,9 +50,6 @@ Antes de poder ejecutar el, se deberá configurar el fichero **/etc/hermesd/serv
 
   <dt>password</dt>
   <dd>Contraseña para el usuario.</dd>
-
-  <dt>key</dt>
-  <dd>Llave privada, en caso de que la conexión SSH a la máquina lo requiera.</dd>
 </dl>
 
 
@@ -75,7 +72,9 @@ El resultado de esta ejecución dese ser
 ![start service](https://github.com/josemanuel179/tfg/blob/main/doc/capturas/start.png)
 
 ## Ejecución de los test unitarios
-Para ejecutar los test unitarios en una terminal, desde el directorio **app**, ejecutar la instrucción
+Para ejecutar los test unitarios, primero se deberán configurar las credenciales de acceso **en los ficheros incluidos en el directorio app/test/**. Estas credencias deben de contar con privilegios de superusuario en la máquina en donde se desean ejecutar. 
+
+Una vez configurdo, desde el directorio **app**, se podrán ejecutar los test mediante la instrucción
 ```
 make test
 ```
