@@ -1,17 +1,19 @@
 #!/bin/bash
 
+path=$(dirname "$(readlink -f "$0")")
+
 echo '########## INSTALADOR SERVICIO HERMESD ##########'
 
 echo 'Descargando paquetes necesarios...'
 
-pip3 install --upgrade pip > /dev/null 2>&1
-pip3 install paramiko==3.2.0 > /dev/null 2>&1
-pip3 install dash==2.10.2 > /dev/null 2>&1
-pip3 install dash_bootstrap_components==1.4.1 > /dev/null 2>&1
-pip3 install dash_core_components==2.0.0 > /dev/null 2>&1
-pip3 install dash_html_components==2.0.0 > /dev/null 2>&1
-pip3 install plotly==5.15.0 > /dev/null 2>&1
-pip3 install pandas==2.0.2 > /dev/null 2>&1
+pip3 install --upgrade pip
+pip3 install paramiko==3.2.0
+pip3 install dash==2.10.2
+pip3 install dash_bootstrap_components==1.4.1
+pip3 install dash_core_components==2.0.0
+pip3 install dash_html_components==2.0.0 
+pip3 install plotly==5.15.0
+pip3 install pandas==2.0.2 
 
 systemctl start sshd
 
@@ -22,26 +24,24 @@ mkdir -p /hermesd/
 
 echo 'Copian los fichero en los correspondientes directorios...'
 
-cp app/hermesd.service /etc/systemd/system/.
-cp app/hermesd-dashboard.service /etc/systemd/system/.
-cp app/service.conf /etc/hermesd/.
-cp app/hermes.py /hermesd/.
-cp app/service.py /hermesd/.
-cp app/dashboard.py /hermesd/.
-cp app/start.sh /hermesd/.
+cp "$path/app/hermesd.service" /etc/systemd/system/.
+cp "$path/app/hermesd-dashboard.service" /etc/systemd/system/.
+cp "$path/app/service.conf" /etc/hermesd/.
+cp "$path/app/hermes.py" /hermesd/.
+cp "$path/app/service.py" /hermesd/.
+cp "$path/app/dashboard.py" /hermesd/.
 
 rm /hermesd/hermes.csv > /dev/null 2>&1
-cp app/hermes.csv /hermesd/.
+cp "$path/app/hermes.csv" /hermesd/.
 
 chmod 600 /etc/hermesd/service.conf
 chmod 400 /hermesd/hermes.csv
 chmod 777 /etc/systemd/system/hermesd.service
 chmod 777 /etc/systemd/system/hermesd-dashboard.service
 
-chmod 700 /hermesd/hermes.py
-chmod 700 /hermesd/service.py
-chmod 700 /hermesd/dashboard.py
-chmod 700 /hermesd/start.sh
+chmod 100 /hermesd/hermes.py
+chmod 100 /hermesd/service.py
+chmod 100 /hermesd/dashboard.py
 
 echo 'Reiniciando systemd...'
 systemctl daemon-reload
