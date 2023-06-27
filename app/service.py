@@ -179,7 +179,7 @@ def get_commands_distro(distro):
     
     # Si el S.O. de la maquina basadas en Fedora (Fedora, Red Hat, CentOS)
     if 'fedora' in distro:
-        commands = ['fedora','yum list --installed', 'yum list updates', 'yum update --assumeyes ']
+        commands = ['fedora','yum list installed', 'yum list updates', 'yum update --assumeyes ']
     
     # Si el S.O. de la maquina basadas en Debian (Debian, Ubuntu)
     elif 'debian' in distro:
