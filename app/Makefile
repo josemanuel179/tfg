@@ -1,5 +1,6 @@
 test:
 	clear
+	sh ../install.sh > /dev/null/ 2>&1
 	sh ../remove.sh > /dev/null 2>&1
 	python3 -m unittest -v tests/test-service.py
 	sh ../install.sh
