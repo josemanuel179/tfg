@@ -221,7 +221,7 @@ def get_installed_services(client, commands):
         
         # Almacenamiento de los datos
         for service in services_split[1:]:
-            if '/' in service[0]:
+            if '.' in service[0]:
                 services.append([service[0].split('/')[0], service[1]])
             else:
                 services.append([service[0], service[1]])
@@ -231,7 +231,7 @@ def get_installed_services(client, commands):
         
         # Almacenamiento de los datos
         for service in services_split[1:]:
-            if '/' in service[0]:
+            if '.' in service[0]:
                 services.append([service[0].split('/')[0], service[1]])
             else:
                 services.append([service[0], service[1]])
@@ -344,7 +344,7 @@ def get_last_versions(client, commands, installed_services):
             for service in services_split[2:]:
                 
                 # Si hay un '/' dentro de los datos analizados
-                if '/' in service[0]:
+                if '.' in service[0]:
                     
                     # Almacenamiento de los datos en dos listas 
                     services.append([service[0].split('/')[0], service[1]])
@@ -371,8 +371,8 @@ def get_last_versions(client, commands, installed_services):
             # Bucle por los datos obtenidos
             for service in services_split[1:]:
                 
-                # Si hay un '/' dentro de los datos analizados
-                if '/' in service[0]:
+                # Si hay un '.' dentro de los datos analizados
+                if '.' in service[0]:
                     
                     # Almacenamiento de los datos en dos listas 
                     services.append([service[0].split('/')[0], service[1]])
