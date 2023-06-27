@@ -4,7 +4,7 @@ Requires = hermesd-dashboard.service
 After = hermesd-dashboard.service
 
 [Service]
-ExecStart = python3 /hermesd/hermes.py &
+ExecStart = /bin/python3 /hermesd/hermes.py &
 
 [Install]
 WantedBy = multi-user.target
