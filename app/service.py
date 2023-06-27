@@ -78,7 +78,8 @@ def get_ip_range(network):
     elif '/' in network:
         
         # Recolección de todas las IPs dentro de la red
-        ips = list(ipaddress.ip_network(network.strip()).hosts())
+        clean_network = network.replace(" ", "")
+        ips = list(ipaddress.ip_network(clean_network).hosts())
         result = [str(element) for element in ips]
     
     # En el caso de que sean varias IPs
@@ -111,7 +112,7 @@ def get_ip_range(network):
 def get_ping(client_ip):
     
     # Comando ping
-    ping_command = comando = ['ping', '-c', '1', client_ip]
+    ping_command = ['ping', '-c', '1', client_ip]
     
     # Ejecución del comando ping y obtención del código de retorno
     response = subprocess.run(ping_command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
