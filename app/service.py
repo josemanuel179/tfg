@@ -595,7 +595,7 @@ def execute_analisys(ip, user, password, key='null'):
         update_services(client, commands, last_versions)
         
         # Actualización de systemctl
-        _, _, _ = client.exec_command('systemctl daemon-reload', get_pty=True)
+        _, _, _ = client.exec_command('systemctl daemon-reload')
 
         # Actualización de los servicios
         services_to_restart = get_restart_services(client, last_versions)
