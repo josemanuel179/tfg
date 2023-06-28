@@ -458,7 +458,7 @@ def get_restart_services(client, last_versions):
     updated_services = list(set(last_versions) & set(active_services))
     
     # Se devuelve el listado de servicios a reiniciar
-    return update_services
+    return updated_services
 
 # -------------------------------------------------
 
