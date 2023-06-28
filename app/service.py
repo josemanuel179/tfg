@@ -222,7 +222,7 @@ def get_installed_services(client, commands):
         # Almacenamiento de los datos
         for service in services_split[1:]:
             if '.' in service[0]:
-                services.append([service[0].split('.')[0], service[1]])
+                services.append([service[0].rsplit('.', 1)[0], service[1]])
             else:
                 services.append([service[0], service[1]])
     
@@ -347,7 +347,7 @@ def get_last_versions(client, commands, installed_services):
                 if '.' in service[0]:
                     
                     # Almacenamiento de los datos en dos listas 
-                    services.append([service[0].split('.')[0], service[1]])
+                    services.append([service[0].rsplit('.', 1)[0], service[1]])
                     services_names.append(service[0].split('.')[0])
                 
                 # En caso contrario
@@ -437,6 +437,39 @@ def update_services(client, commands, updates):
         # Ejecutamos la actualización de todos los servicios
         command = commands[3] + " ".join(updates)
         _ = execute_command(client, command)
+
+    return None
+
+# -------------------------------------------------
+
+# Método principal destino a obtención de los servicios de la máquina que han sido actualizado por el servicio
+def get_restart_services(client, last_versions):
+    
+    # Se obtienen los servicios activos en la máquina
+    output = execute_command(client, 'systemctl list-units --type=service --state=active,enabled --no-pager --no-legend')
+    
+    # Se deupuran los datos para que solo salga el nombre de los servicios
+    services_list = output.split('\n')
+    services_list_clean = [" ".join(element.split()) for element in services_list]
+    services_split = [element.split(' ') for element in services_list_clean][:-1]
+    active_services = [element[0].rsplit('.',1)[0] for element in services_split if '.' in element[0]]
+
+    # Se realiza una comparación de los servicios activos con los servicios actualizados
+    updated_services = list(set(last_versions) & set(active_services))
+    
+    # Se devuelve el listado de servicios a reiniciar
+    return update_services
+
+# -------------------------------------------------
+
+def restart_services(client, services_to_restart):
+    
+    # Si la lista de 'services_to_restart' no esta vacía
+    if services_to_restart:
+
+        # Ejecutamos la actualización de todos los servicios
+        command = "systemctl restart " + " ".join(services_to_restart)
+        _, _, _ = client.exec_command(command, get_pty=True)
 
     return None
 
@@ -558,11 +591,17 @@ def execute_analisys(ip, user, password, key='null'):
         # Obtención de los servicios a actualizar, la cantidad de servicios disponibles a acutilzar y la cantidad de servicios actualizados
         last_versions, last_versions_len , update_versions_len = get_last_versions(client, commands, actual_services)
         print(last_versions)
+        sys.stdout.flush()
         update_services(client, commands, last_versions)
         
         # Actualización de systemctl
         _, _, _ = client.exec_command('systemctl daemon-reload', get_pty=True)
+
+        # Actualización de los servicios
+        services_to_restart = get_restart_services(client, last_versions)
+        print(services_to_restart)
         sys.stdout.flush()
+        restart_services(client, services_to_restart)
 
     # En el caso de que la ejecucuión de algun método falle, se continua con la ejecución del servicio
     except:
