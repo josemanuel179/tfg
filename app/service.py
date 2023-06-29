@@ -576,11 +576,12 @@ def execute_analisys(ip, user, password, key='null'):
         command = "sudo systemctl list-unit-files --type=service --no-pager --no-legend | awk '!/poweroff.target|reboot.target|halt.target|hermesd(-dashboard)?\.service/{print $1}' | xargs -I{} sudo systemctl try-restart {}"
         if len(last_versions) != 0:
             _, _, _ = client.exec_command(command)
+        print("Servicios de la máquina " + str(ip) + " han sido reiniciados")
+        sys.stdout.flush()
     
     except:
         print("Exception. No se ha podidio reiniciar los servicios en la máquina " + str(ip))
         sys.stdout.flush()
-        return
 
     # Almacenamiento datos estadísticos
     try:
@@ -592,6 +593,8 @@ def execute_analisys(ip, user, password, key='null'):
             writer = csv.writer(f)
             fields = [date.strftime("%Y-%m-%d %H:%M:%S"), commands[0].capitalize(), actual_services_len, update_versions_len, actual_services_len-last_versions_len+update_versions_len, last_versions_len-update_versions_len]
             writer.writerow(fields)
+            print("Métricas de la máquina " + str(ip) + " han sido almacenadas")
+            sys.stdout.flush()
 
     # En caso contrario
     except:
