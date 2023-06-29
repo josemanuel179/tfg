@@ -232,7 +232,7 @@ class TestService(unittest.TestCase):
         self.assertEqual(service.get_commands_distro('debian'), debian_commands)
     
     def test_TS21_obtencion_comandos_necesarios_por_sistema_operativo_SUSE(self):
-        suse_commands = ['opensuse', 'zypper pa --installed-only', 'zypper list-updates', 'zypper up -y ']
+        suse_commands = ['suse', 'zypper pa --installed-only', 'zypper list-updates', 'zypper up -y ']
         self.assertEqual(service.get_commands_distro('suse'), suse_commands)
     
     def test_TS22_obtencion_maquina_sin_IP(self):

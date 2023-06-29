@@ -166,7 +166,7 @@ def check_distro(distro):
     # Listado de sistemas operativos
     applied_distros = ['fedora', 'debian', 'opensuse','suse']
     
-    # Se comprueba que la distribución sea derivada de Debian, Fedora o OpenSUSE
+    # Se comprueba que la distribución sea derivada de Debian, Fedora o Suse
     return any(element.lower() in distro for element in applied_distros)
 
 # -------------------------------------------------
@@ -185,9 +185,9 @@ def get_commands_distro(distro):
     elif 'debian' in distro:
         commands = ['debian', 'apt list --installed', 'apt list --upgradeable', 'apt install -y ']
     
-    # Si el S.O. de la maquina basadas en OpenSuse
+    # Si el S.O. de la maquina basadas en Suse
     elif 'opensuse' in distro or 'suse' in distro:
-        commands = ['opensuse', 'zypper pa --installed-only', 'zypper list-updates', 'zypper up -y ']
+        commands = ['suse', 'zypper pa --installed-only', 'zypper list-updates', 'zypper up -y ']
     
     else:
         commands = None
@@ -211,7 +211,7 @@ def get_installed_services(client, commands):
         services_list_clean = [" ".join(element.split()) for element in services_list]
         services_split = [element.split(' ') for element in services_list_clean][:-1]
     
-    # En el caso de que sea opensuse
+    # En el caso de que sea suse
     else:
         services_list = output.split('\n')
         services_split = [element.split('|') for element in services_list]
@@ -236,8 +236,8 @@ def get_installed_services(client, commands):
             else:
                 services.append([service[0], service[1]])
 
-    # Si el S.O. de la máquina es una variante de OpenSUSE
-    elif commands[0] == 'opensuse':
+    # Si el S.O. de la máquina es una variante de Suse
+    elif commands[0] == 'suse':
         
         # Almacenamiento de los datos
         for service in services_split[4:-1]:
@@ -329,7 +329,7 @@ def get_last_versions(client, commands, installed_services):
         services_list_clean = [" ".join(element.split()) for element in services_list]
         services_split = [element.split(' ') for element in services_list_clean][:-1]
     
-    # En el caso de que sea opensuse
+    # En el caso de que sea suse
     else:
         services_list = output.split('\n')
         services_split = [element.split('|') for element in services_list]
@@ -390,8 +390,8 @@ def get_last_versions(client, commands, installed_services):
             services = []
             services_names = []
     
-    # Si el S.O. de la máquina es una variante de OpenSUSE
-    elif commands[0] == 'opensuse':
+    # Si el S.O. de la máquina es una variante de Suse
+    elif commands[0] == 'suse':
         
          # Comprobación lista no vacia
         if len(services_split) > 5:
@@ -437,39 +437,6 @@ def update_services(client, commands, updates):
         # Ejecutamos la actualización de todos los servicios
         command = commands[3] + " ".join(updates)
         _ = execute_command(client, command)
-
-    return None
-
-# -------------------------------------------------
-
-# Método principal destino a obtención de los servicios de la máquina que han sido actualizado por el servicio
-def get_restart_services(client, last_versions):
-    
-    # Se obtienen los servicios activos en la máquina
-    output = execute_command(client, 'systemctl list-units --type=service --state=active,enabled --no-pager --no-legend')
-    
-    # Se deupuran los datos para que solo salga el nombre de los servicios
-    services_list = output.split('\n')
-    services_list_clean = [" ".join(element.split()) for element in services_list]
-    services_split = [element.split(' ') for element in services_list_clean][:-1]
-    active_services = [element[0].rsplit('.',1)[0] for element in services_split if '.' in element[0]]
-
-    # Se realiza una comparación de los servicios activos con los servicios actualizados
-    updated_services = list(set(last_versions) & set(active_services))
-    
-    # Se devuelve el listado de servicios a reiniciar
-    return updated_services
-
-# -------------------------------------------------
-
-def restart_services(client, services_to_restart):
-    
-    # Si la lista de 'services_to_restart' no esta vacía
-    if services_to_restart:
-
-        # Ejecutamos la actualización de todos los servicios
-        command = "systemctl restart " + " ".join(services_to_restart)
-        _, _, _ = client.exec_command(command, get_pty=True)
 
     return None
 
@@ -594,18 +561,24 @@ def execute_analisys(ip, user, password, key='null'):
         sys.stdout.flush()
         update_services(client, commands, last_versions)
         
+    # En el caso de que la ejecucuión de algun método falle, se continua con la ejecución del servicio
+    except:
+        print("Exception. No se ha podidio ejecutar el análisis en la máquina " + str(ip))
+        sys.stdout.flush()
+        return
+    
+    # Ejecución de reinicio de los servicios de la máquina
+    try:
         # Actualización de systemctl
         _, _, _ = client.exec_command('systemctl daemon-reload')
 
         # Actualización de los servicios
-        services_to_restart = get_restart_services(client, last_versions)
-        print(services_to_restart)
-        sys.stdout.flush()
-        restart_services(client, services_to_restart)
-
-    # En el caso de que la ejecucuión de algun método falle, se continua con la ejecución del servicio
+        command = "sudo systemctl list-unit-files --type=service --no-pager --no-legend | awk '!/poweroff.target|reboot.target|halt.target|hermesd(-dashboard)?\.service/{print $1}' | xargs -I{} sudo systemctl try-restart {}"
+        if len(last_versions) != 0:
+            _, _, _ = client.exec_command(command)
+    
     except:
-        print("Exception. No se ha podidio ejecutar el análisis en la máquina " + str(ip))
+        print("Exception. No se ha podidio reiniciar los servicios en la máquina " + str(ip))
         sys.stdout.flush()
         return
 
