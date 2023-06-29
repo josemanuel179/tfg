@@ -17,4 +17,4 @@ class TestDashbooard(unittest.TestCase):
         finally:
             s.close()
 
-        self.assertTrue(connected)
+        self.assertTrue(connected, "Este control es únicamnte valído si se lanza sobre la máquina local")
