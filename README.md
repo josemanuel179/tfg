@@ -71,10 +71,17 @@ El resultado de esta ejecución dese ser
 
 ![start service](https://github.com/josemanuel179/tfg/blob/main/doc/capturas/start.png)
 
-## Ejecución de los test unitarios
-Para ejecutar los test unitarios, primero se deberán configurar las credenciales de acceso **en los ficheros incluidos en el directorio app/test/**. Estas credencias deben de contar con privilegios de superusuario en la máquina en donde se desean ejecutar. 
+## Desinstalación
+Al igual que la instalación del servicio, para desinstalarlo solo se debe **ejecutar el fichero remove.sh** desde una terminal de la siguiente forma:
+```
+sh ./remove.sh
+```
 
-Una vez configurado, desde el directorio **app**, se podrán ejecutar los test mediante la instrucción
+## Ejecución de los test unitarios
+Para ejecutar los test unitarios, primero se deberán configurar las credenciales de acceso **en los ficheros incluidos en el directorio app/test/**. Estas credencias son imprescindibles para la ejecución de las pruebas, y deben de contar con privilegios de superusuario en la máquina en donde se desean ejecutar. 
+
+Una vez configuradas las credenciales en todos los ficheros necesarios, desde el directorio **app/** y con un usuario con privilegios de administrador, se podrán ejecutar los test mediante la instrucción:
+
 ```
 make test
 ```
