@@ -4,7 +4,7 @@ After = multi-user.target
 BindsTo = hermesd.service
 
 [Service]
-ExecStart = /bin/python3 /hermesd/dashboard.py &
+ExecStart = /usr/bin/python3 /hermesd/dashboard.py &
 
 [Install]
 WantedBy = multi-user.target
