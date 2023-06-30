@@ -10,7 +10,7 @@ Servicio diseñado para identificar, analizar y actualizar, de forma automática
 # Módulos necesarios
 Para ejecutar el servicio se requiere de los módulos
 ```
-paramiko==2.10.4
+paramiko==3.2.0
 dash==2.10.2
 dash_bootstrap_components==1.4.1
 dash_core_components==2.0.0
